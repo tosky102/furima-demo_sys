@@ -1,0 +1,84 @@
+<?php
+$meta_title = Configure::read('html.mypage');
+$meta_keywords = Configure::read('html.mypage');
+$meta_description = Configure::read('html.mypage');
+
+$this->set('title_for_layout',$meta_title);
+$this->Html->meta('keywords', $meta_keywords, array('inline' => false));
+$this->Html->meta('description', $meta_description, array('inline' => false));
+
+$this->Html->css('/css/main02.css', null, array('inline' => false));
+
+
+$code_area = <<< EOF
+$('#btnDraft').click(function() {
+$("#status").val(0);
+$("#formMessage").submit();
+});
+EOF;
+$this->assign('script_area', $code_area);
+?>
+
+<nav class="bread-crumbs">
+  <ul>
+    <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+      <a href="/" itemprop="url">
+        <span itemprop="title">トップ</span>
+      </a>
+      <i class="icon-arrow-right"></i>
+    </li>
+
+    <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+      <a href="/message" itemprop="url">
+        <span itemprop="title">メッセージ</span>
+      </a>
+      <i class="icon-arrow-right"></i>
+    </li>
+
+    <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+      <a href="/message/sendinglist" itemprop="url">
+        <span itemprop="title">送信一覧</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<main class=" l-container clearfix">
+  <div class="l-content">
+    <section class="l-chapter-container mypage-identification">
+      <h2 class="l-chapter-head">送信する</h2>
+      <?php echo $this->Form->create('Message', array('id' => 'formMessage', 'url' => '/message/new_message/'.$arrToMember['Member']['id'].'/'.$arrData['FromItem']['id'], 'class' => 'l-single-inner')); ?>
+
+      <?php echo $this->Form->input('to_member_id', array('label' => false, 'type' => 'hidden', 'value' => $arrToMember['Member']['id'], )) ?>
+      <?php echo $this->Form->input('from_member_id', array('label' => false, 'type' => 'hidden', 'value' => $loginMember['id'], )) ?>
+      <?php echo $this->Form->input('status', array('id' => 'status', 'type' => 'hidden', 'value' => 1, )) ?>
+
+      <div class="form-group">
+        <label>宛先：<?php echo $arrToMember['Member']['company'] ?> <?php echo $arrToMember['Member']['name'] ?></label>
+      </div>
+
+      <div class="form-group">
+        <label>件名</label>
+        <span class="form-require">必須</span>
+        <?php echo $this->Form->input('subject', array('label' => false, 'div' => false, 'type' => 'text', 'class' => 'input-default', 'value' => $arrData['Message']['subject'], )) ?>
+      </div>
+
+      <div class="form-group">
+        <label>内容</label>
+        <span class="form-require">必須</span>
+        <?php echo $this->Form->input('body', array('label' => false, 'div' => false, 'type' => 'text', 'class' => 'textarea-default', 'rows' => 10, 'cols' => 50, 'value' => $arrData['Message']['body'], )) ?>
+      </div>
+
+      <button type="submit" class="btn-default btn-red">送信</button>
+
+      <div style="margin-top: 18px">
+        <button type="reset" class="btn-default btn-gray" style="width: 49%; margin-right: 2%; float: left" id="no_agree">取り消し</button>
+        <button type="button" class="btn-default btn-gray" style="width: 49%; " id="btnDraft">下書きに保存</button>
+      </div>
+
+      <?php echo $this->Form->end(); ?>
+    </section>
+  </div>
+
+  <?= $this->element('mypage_nav', ['strPage' => $strPage]) ?>
+</main>

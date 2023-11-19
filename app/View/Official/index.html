@@ -1,0 +1,129 @@
+<?php
+$meta_title = Configure::read('html.mypage');
+$meta_keywords = Configure::read('html.mypage');
+$meta_description = Configure::read('html.mypage');
+
+$this->set('title_for_layout',$meta_title);
+$this->Html->meta('keywords', $meta_keywords, array('inline' => false));
+$this->Html->meta('description', $meta_description, array('inline' => false));
+
+$this->Html->css('/css/main02.css', null, array('inline' => false));
+
+
+$this->Html->script('/js/page.js', array('inline' => false));
+
+// 表示件数
+$arrDispNum = Configure::read('arrDispNum');
+
+$code_area = <<< EOF
+$('#disp_num').change(function() {
+$("#ChangeDispNumForm").submit();
+});
+EOF;
+$this->assign('script_area', $code_area);
+?>
+
+<nav class="bread-crumbs ">
+  <ul>
+    <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+      <a href="/" itemprop="url">
+        <span itemprop="title">トップ</span>
+      </a>
+      <i class="icon-arrow-right"></i>
+    </li>
+    <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+      <a href="#" itemprop="url">
+        <span itemprop="title">公認ショップ</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
+
+<div class="main__slider">
+  <div class="main__slide" style="background-image: url(https://web-jp-assets.mercdn.net/_next/static/images/top-banner-sale-fee-free-034ec8d0642f5714a26822988195b62c.png)"></div>
+  <div class="main__slide" style="background-image: url(https://web-jp-assets.mercdn.net/_next/static/images/top-banner-main-892151cc75b1f6a1285bf7943c9b933c.jpg)"></div>
+  <div class="main__slide" style="background-image: url(https://web-jp-assets.mercdn.net/_next/static/images/top-banner-camp-4f3fd88c685e8932d7dde2ad3a8336ba.jpg)"></div>
+</div>
+
+
+<div class="main">
+  <div class="main_1">
+
+    <div class="main__product__images">
+      <div class="main__product__list">
+        <div class="main__product__list__name">
+          <h3 class="heading__01 common__font__family res__font__size__01 common__flex">
+            公式アカウントの新着商品
+          </h3>
+          <a href="/official/newData_rank" class="more__link">
+            もっと見る
+          </a>
+        </div>
+        <div class="main__product__list__list">
+          <div>
+            <ul class="main__product__list__ul">
+              <?php foreach($arrNewDatas as $row): ?>
+              <?= $this->element('item_01', ['row' => $row]) ?>
+              <?php endforeach; ?>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="main__product__list">
+        <div class="main__product__list__name">
+          <h3 class="heading__01 common__font__family res__font__size__01 common__flex">
+            公式アカウントのおすすめ商品
+          </h3>
+          <a href="/official/pickup_rank" class="more__link">
+            もっと見る
+          </a>
+        </div>
+        <div class="main__product__list__list">
+          <div>
+            <ul class="main__product__list__ul">
+              <?php foreach($arrPickUp as $k => $row): ?>
+              <?= $this->element('item_01', ['row' => $row]) ?>
+              <?php endforeach; ?>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="main__product__list">
+        <div class="main__product__list__name">
+          <h3 class="heading__01 common__font__family res__font__size__01 common__flex">
+            公式アカウント一覧
+          </h3>
+          <a href="/official/seller_rank" class="more__link">
+            もっと見る
+          </a>
+        </div>
+        <div class="main__product__list__list">
+          <div>
+            <ul class="main__product__list__ul">
+              <?php foreach($arrOfficialSeller as $row): ?>
+              <?= $this->element('user_item_01', ['row' => $row]) ?>
+              <?php endforeach; ?>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+
+<script>
+  $(document).ready(function(){
+    $('.main__slider').bxSlider({
+      mode: 'fade',
+      pager: false
+    });
+  });
+</script>

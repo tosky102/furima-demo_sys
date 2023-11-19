@@ -1,0 +1,282 @@
+<?php
+$meta_title = Configure::read('html.items');
+$meta_keywords = Configure::read('html.items');
+$meta_description = Configure::read('html.items');
+
+$this->set('title_for_layout',$meta_title);
+$this->Html->meta('keywords', $meta_keywords, array('inline' => false));
+$this->Html->meta('description', $meta_description, array('inline' => false));
+
+// $this->Html->script('/js/page.js', array('inline' => false));
+
+// 表示件数
+$arrDispNum = Configure::read('arrDispNum');
+
+$code_area = <<< EOF
+$('.disp_num').change(function() {
+$("#ChangeDispNumForm").submit();
+});
+EOF;
+$this->assign('script_area', $code_area);
+?>
+
+<form id="searchForm">
+  <input type="hidden" name="pg" value="<?= $pg ?>" id="pg" />
+  <input type="hidden" name="sort" value="<?= $sort ?>" id="sort" />
+  <?php if($keyword && isset($is_search)): ?>
+  <input type="hidden" name="keyword" value="<?= $keyword ?>" id="keyword" />
+  <?php endif; ?>
+  <?php if($category && isset($is_search)): ?>
+  <input type="hidden" name="category" value="<?= $category ?>" id="category" />
+  <?php endif; ?>
+  <?php if($tag && isset($is_search)): ?>
+  <input type="hidden" name="tag" value="<?= $tag ?>" id="tag" />
+  <?php endif; ?>
+</form>
+<main class="search-container l-container clearfix">
+  <div class="l-content">
+    <div class="hidden-large search-nav clearfix">
+      <div>
+        <i class="icon-sort"></i>
+        <div class="search-nav-sort">並び替え</div>
+      </div>
+      <div data-dropdown="nav" data-dropdown-nav-id="extend" onclick="searchDropDown()">
+        <i class="icon-search-detail"></i>
+        <div>詳細検索</div>
+      </div>
+    </div>
+
+    <section>
+      <section class="items-box-container clearfix">
+        <h2 class="search-result-head">
+          <?= $strH2[0] ?><span class="search-result-head-text"><?= $strH2[1] ?></span>
+        </h2>
+
+        <div class="search-result-number">
+          <?php echo $arrDatas['total']; ?>件中　<?php echo ($pg - 1) * $display + 1?>～<?php echo min($pg * $display, $arrDatas['total'])?>件表示
+        </div>
+
+        <div class="items-box-content clearfix">
+          <?php foreach($arrDatas['list'] as $row): ?>
+          <?= $this->element('item_02', ['row' => $row]) ?>
+          <?php endforeach; ?>
+        </div>
+
+      </section>
+      <ul class="pager">
+        <?php if($pg > 1): ?>
+        <li class="pager-prev visible-pc">
+          <ul>
+            <li class="pager-cell">
+              <a href="#" onclick="toPage(1)">
+                <i class="icon-arrow-double-left"></i>
+              </a>
+            </li>
+            <li class="pager-cell">
+              <a href="#" onclick="toPage(<?=$pg - 1 ?>)">
+                <i class="icon-arrow-left"></i>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <?php endif; ?>
+
+        <li class="pager-num">
+          <ul>
+            <?php for($page=$pgStart; $page<=$pgEnd; $page++): ?>
+
+            <?php if($page == $pg): ?>
+            <li class="pager-cell active">
+              <?= $page ?>
+            </li>
+            <?php else: ?>
+            <li class="pager-cell">
+              <a href="#" onclick="toPage(<?= $page ?>)"><?= $page ?></a>
+            </li>
+            <?php endif; ?>
+
+            <?php endfor; ?>
+          </ul>
+        </li>
+
+        <?php if($pg < $pgTot): ?>
+        <li class="pager-next visible-pc">
+          <ul>
+            <li class="pager-cell">
+              <a href="#" onclick="toPage(<?= $pg + 1?>)">
+                <i class="icon-arrow-right"></i>
+              </a>
+            </li>
+            <li class="pager-cell">
+              <a href="#" onclick="toPage(<?= $pgTot ?>)">
+                <i class="icon-arrow-double-right"></i>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <?php endif; ?>
+      </ul>
+    </section>
+
+  </div>
+
+  <div class="l-side">
+    <form action="/item/search" class="search-extend-container search-extend-form" data-ga="element" data-ga-category="SEARCH" data-ga-label="extend_search">
+
+      <div class="search-sort">
+        <div class="form-group">
+          <div class="select-wrap">
+            <i class="icon-arrow-bottom visible-large"></i>
+            <select name="sort" class="select-default" onchange="changeSort(this)">
+              <?php if($sort == ''): ?>
+                <option value="" selected>並び替え</option>
+              <?php else: ?>
+                <option value="">並び替え</option>
+              <?php endif; ?>
+              <?php if($sort == 'new'): ?>
+                <option value="new" selected>出品の新しい順</option>
+              <?php else: ?>
+                <option value="new">出品の新しい順</option>
+              <?php endif; ?>
+
+              <?php if($sort == 'low'): ?>
+              <option value="low" selected>価格の安い順</option>
+              <?php else: ?>
+              <option value="low">価格の安い順</option>
+              <?php endif; ?>
+
+              <?php if($sort == 'high'): ?>
+              <option value="high" selected>価格が高い</option>
+              <?php else: ?>
+              <option value="high">価格が高い</option>
+              <?php endif; ?>
+
+              <?php if($sort == 'sale'): ?>
+              <option value="sale" selected>売れ筋</option>
+              <?php else: ?>
+              <option value="sale">売れ筋</option>
+              <?php endif; ?>
+
+              <?php if($sort == 'pickup'): ?>
+              <option value="sale" selected>PICKUP</option>
+              <?php else: ?>
+              <option value="sale">PICKUP</option>
+              <?php endif; ?>
+
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="search-dropdown-content search-extend" data-dropdown="content" data-dropdown-content-id="extend" id="search-dropdown">
+
+        <h3 class="visible-large">詳細検索</h3>
+
+        <div class="form-group">
+          <label>
+            <i class="icon-plus"></i>
+            <span>キーワードを追加する</span>
+          </label>
+          <input type="text" value="<?= $keyword ?>" name="keyword" placeholder="例）値下げ" class="input-default">
+        </div>
+        <div class="form-group">
+          <label>
+            <i class="icon-list"></i>
+            <span>カテゴリーを選択する</span>
+          </label>
+          <div class="select-wrap" data-search="parent">
+            <i class="icon-arrow-bottom"></i>
+            <select name="category" class="select-default">
+              <option value="">すべて</option>
+              <?php foreach($arrCategory as $key=>$categories): ?>
+                <optgroup label="<?= $key ?>">
+                  <?php foreach($categories as $key1=>$val1): ?>
+                  <?php if($key1 == $category): ?>
+                  <option value="<?= $key1 ?>" selected><?= $val1 ?></option>
+                  <?php else: ?>
+                  <option value="<?= $key1 ?>"><?= $val1 ?></option>
+                  <?php endif; ?>
+                  <?php endforeach; ?>
+                </optgroup>
+
+              <?php endforeach; ?>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group search-extend-brand">
+          <label>
+            <i class="icon-tag"></i>
+            <span>キーワードから探す</span>
+          </label>
+          <input type="text" value="<?= $tag ?>" name="tag" placeholder="例）C#" class="input-default">
+        </div>
+
+        <div class="form-group search-price" style="display: none">
+          <label>
+            <i class="icon-coin"></i>
+            <span>価格</span>
+          </label>
+          <div class="select-wrap">
+            <i class="icon-arrow-bottom"></i>
+            <select name="" class="select-default" data-search="price">
+              <option value="">選択してください</option>
+              <option value="300-1000">
+                300 ~ 1000
+              </option>
+              <option value="1000-5000">
+                1000 ~ 5000
+              </option>
+              <option value="5000-10000">
+                5000 ~ 10000
+              </option>
+              <option value="10000-30000">
+                10000 ~ 30000
+              </option>
+              <option value="30000-50000">
+                30000 ~ 50000
+              </option>
+              <option value="50000">
+                50000 ~
+              </option>
+            </select>
+          </div>
+          <input type="number" name="price_min" value="" placeholder="¥ Min" class="input-default" data-search="price-min">
+          <span> ~ </span>
+          <input type="number" name="price_max" value="" placeholder="¥ Max" class="input-default" data-search="price-max">
+        </div>
+
+        <div class="search-extend-btn-empty"></div>
+        <div class="search-extend-btn clearfix">
+          <button type="reset" class="btn-default btn-gray">クリア</button>
+          <button type="submit" class="btn-default btn-red">完了</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</main>
+
+<script>
+  function searchDropDown() {
+    if ($('#search-dropdown').hasClass('is-show')) {
+      $('#search-dropdown').removeClass('is-show');
+    } else {
+      $('#search-dropdown').addClass('is-show');
+    }
+  }
+
+  function toPage(pg) {
+    $('#pg').attr('value', pg);
+    $('#searchForm').submit();
+  }
+
+  function changeSort(obj) {
+    var ind = obj.selectedIndex;
+    if (ind > 0) {
+      var val = obj.options[ind].value;
+      $('#sort').attr('value', val);
+      $('#pg').attr('value', 1);
+      $('#searchForm').submit();
+    }
+  }
+</script>

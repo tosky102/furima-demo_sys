@@ -1,0 +1,31 @@
+<?php
+$img_url = $this->Image->upload_resize('members', $row['Member']['id'], $row['Member']['image_file_name'], 'list_s');
+$img_path = str_replace(WWW_ROOT,'/',$img_url);
+
+if(!file_exists($img_url) || !$img_path || substr_count($img_path, '.') > 2){
+$img_path = "/img/front_s.png";
+}
+$img_url = $img_path;
+    $item_url = "/mypage/sellerinfo/" . $row['Member']['id'];
+
+if(!empty($row['Member']['company'])) {
+$item_name = h($row['Member']['company']);
+} else {
+$item_name = h($row['Member']['nickname']);
+}
+?>
+
+<li class="main__product__list__li">
+    <div class="main__product__list__li__div">
+        <a href="<?= $item_url ?>" class="main__product__list__link">
+            <figure class="common__card__01 res__width__01 common__font__family common__fluid__01">
+                <figcaption>
+                    <span><?= $item_name ?></span>
+                </figcaption>
+                <div class="common__card__01__img">
+                    <img src="<?= $img_url ?>" alt="<?= $item_name ?>">
+                </div>
+            </figure>
+        </a>
+    </div>
+</li>

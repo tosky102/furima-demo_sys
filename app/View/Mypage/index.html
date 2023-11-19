@@ -1,0 +1,186 @@
+<?php
+$meta_title = Configure::read('html.mypage');
+$meta_keywords = Configure::read('html.mypage');
+$meta_description = Configure::read('html.mypage');
+
+$this->set('title_for_layout',$meta_title);
+$this->Html->meta('keywords', $meta_keywords, array('inline' => false));
+$this->Html->meta('description', $meta_description, array('inline' => false));
+
+$this->Html->css('/css/main02.css', null, array('inline' => false));
+$this->Html->css('/css/remodal.css', null, array('inline' => false));
+$this->Html->css('/css/remodal-default-theme.css', null, array('inline' => false));
+
+$this->Html->script('/js/remodal.js', array('inline' => false));
+$this->Html->script('/js/page.js', array('inline' => false));
+
+$arrMember = $arrMemberInfo['Member'];
+
+$code_area = <<< EOF
+$('.curArea').click(function() {
+$("#input_name").val($(this).attr("name"));
+});
+EOF;
+$this->assign('script_area', $code_area);
+?>
+
+<nav class="bread-crumbs">
+    <ul>
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+            <a href="/" itemprop="url">
+                <span itemprop="title">トップ</span>
+            </a>
+            <i class="icon-arrow-right"></i>
+        </li>
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+            <a href="/mypage" itemprop="url">
+                <span itemprop="title">マイページ</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+
+<main class=" l-container clearfix">
+    <div class="l-content">
+        <section class="l-chapter-container mypage-identification">
+            <h2 class="l-chapter-head">マイページ</h2>
+            <form class="l-single-inner" style="overflow: hidden">
+                <div class="l-single-inner-left">
+                    <div class="form-group" style="overflow: hidden">
+                        <div class="sell-upload-main-imagebox drag-drop-inside" id="div-0" style="width: 100%">
+                            <?php
+                        if(!empty($arrMember['image_file_name'])){
+                            echo $this->Upload->uploadImage($arrMember,'Member.image',array('style'=>'list_l'), array('class'=>'block-img'));
+                            }else{
+                            echo '<img src="/img/front_s.png" alt="画像" class="block-img">';
+                            }
+                            ?>
+
+                            <div class="upload-imagebox-link">
+                                <a data-remodal-target="modal" name="image" class="curArea">画像を編集する</a>
+                                <?php if(!empty($arrMember['image_file_name'])): ?>
+                                <a class="image_del" href="javascript:void(0)" data-url="/mypage/member_image_del/">画像削除</a>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+
+                        <div class="mypage-user-part">
+                            <p class="mypage-user-property">ポイント残高</p>
+                            <p class="mypage-user-value"><span class="strong"><?php echo number_format($arrMember['point']) ?></span>ポイント</p>
+
+                            <p class="mypage-user-property">ユーザーレベル</p>
+                            <p class="mypage-user-value">
+                                <?php if (isset($ratingAve)) :?>
+                                <span class="strong"><?php echo $ratingAve; ?></span>レベル
+                                <?php else :?>
+                                登録なし
+                                <?php endif; ?>
+                            </p>
+
+                            <p class="mypage-user-property">出品商品サマリー</p>
+                            <p class="mypage-user-value">
+                                販売中<span class="numeric-value"><span class="strong"><?php echo $arrItemSummary['販売中'] ?></span>件</span><br>
+                                一時停止<span class="numeric-value"><span class="strong"><?php echo $arrItemSummary['一時停止'] ?></span>件</span><br>
+                                販売終了<span class="numeric-value"><span class="strong"><?php echo $arrItemSummary['販売終了'] ?></span>件</span>
+                            </p>
+
+
+                            <p class="mypage-user-property">購入商品サマリー</p>
+                            <p class="mypage-user-value">
+                                購入済み<span class="numeric-value"><span class="strong"><?php echo $intFavoriteCount ?></span>件</span><br>
+                                お気に入り<span class="numeric-value"><span class="strong"><?php echo $intFavoriteCount ?></span>件</span><br>
+                            </p>
+
+                            <p class="mypage-user-property">フォロー数</p>
+                            <p class="mypage-user-value"><span class="strong"><?php echo $intFollowCount ?></span>人</p>
+
+                            <p class="mypage-user-property">フォロワー数</p>
+                            <p class="mypage-user-value"><span class="strong"><?php echo $intFollowerCount ?></span>人</p>
+
+                            <p class="mypage-user-property">メッセージ</p>
+                            <p class="mypage-user-value">
+                                受　信<span class="numeric-value"><span class="strong"><?php echo $intReceivedCount ?></span>件</span><br>
+                                未開封<span class="numeric-value"><span class="strong"><?php echo $intgetUnreadCount ?></span>件</span><br>
+                            </p>
+
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="l-single-inner-right">
+                    <div class="form-group">
+                        <p class="mypage-user-name">ユーザー名</p>
+                        <p class="mypage-user-tab"><?php echo $arrMember['company'] ?> [ <?php echo $arrMember['name'] ?> ]</p>
+                        <p><span class="mypage-user-detail"><a href="/mypage/sellerinfo/<?php echo $arrMember['id'] ?>">販売者ページを確認する</a></span></p>
+                    </div>
+                    <div class="form-group">
+                        <p class="mypage-user-name"><span>販売者用</span></p>
+                        <p class="mypage-user-tab"><a href="/mypage/item">商品を出品する</a></p>
+                        <p class="mypage-user-tab"><a href="/mypage/item_list">商品リスト／登録した商品を編集する</a></p>
+                        <p class="mypage-user-tab"><a href="/mypage/process_order">注文を処理する</a></p>
+                        <p class="mypage-user-tab"><a href="/mypage/sales_report">売り上げ状況を確認する</a></p>
+                        <p class="mypage-user-tab"><a href="/mypage/cashing">換金申請をする</a></p>
+                    </div>
+
+                    <div class="form-group">
+                        <p class="mypage-user-name"><span>購入者用</span></p>
+                        <p class="mypage-user-tab"><a href="/cart">カートを見る</a></p>
+                        <p class="mypage-user-tab"><a href="/cart/buy_point">ポイントを買う</a></p>
+                        <p class="mypage-user-tab"><a href="/mypage/favorite">お気に入り一覧</a></p>
+                        <p class="mypage-user-tab"><a href="/mypage/purchased">購入した商品を見る</a></p>
+                        <p class="mypage-user-tab"><a href="/mypage/purchased_point">ポイント購入履歴を見る</a></p>
+                    </div>
+
+                    <div class="form-group">
+                        <p class="mypage-user-name"><span>登録情報</span></p>
+                        <p class="mypage-user-tab"><a href="/mypage/profile">登録情報を変更する</a></p>
+                        <p class="mypage-user-tab"><a href="/message">メッセージ一覧</a></p>
+                        <p class="mypage-user-tab"><a href="/mypage/notice_mail">メール通知設定</a></p>
+                        <p class="mypage-user-tab"><a href="/mypage/followlist">フォロー一覧</a></p>
+                        <p class="mypage-user-tab"><a href="/mypage/followerlist">フォロワー一覧</a></p>
+                        <p class="mypage-user-tab"><a href="/mypage/withdrawal">退会する</a></p>
+                    </div>
+                </div>
+            </form>
+
+        </section>
+
+    </div>
+
+    <?= $this->element('mypage_nav', ['strPage' => $strPage]) ?>
+</main>
+
+<div class="remodal" data-remodal-id="modal" data-remodal-options="hashTracking:false">
+    <?php echo $this->Form->create('Member',
+    array('id' => 'FileUpForm',
+    'url' => '/mypage/member_image_fileup',
+    'type' => 'file',
+    )); ?>
+    <?php echo $this->Form->input('id',
+    array('label' => false,
+    'type' => 'hidden',
+    'value' => $arrMember['id'],
+    )) ?>
+    <?php echo $this->Form->input('input_name',
+    array('label' => false,
+    'type' => 'hidden',
+    'id' => 'input_name',
+    )) ?>
+    <?php echo $this->Form->input('image_file_name',
+    array('type'=>'hidden',
+    'label'=>false,
+    'div' => false,
+    'value' => $arrMember['image_file_name']
+    )) ?>
+
+    <button data-remodal-action="close" class="remodal-close"></button>
+    <h2>ファイルアップロード</h2>
+    <p>画像ファイルをアップロードして下さい。</p>
+    <p class="m40">
+        <?php echo $this->Form->input('file',array('type'=>'file','label'=>false,'div'=>false,'class'=>'aligncenter','accept'=>'image/jpeg,image/png,image/gif')) ?>
+    </p>
+    <button data-remodal-action="cancel" class="remodal-cancel">キャンセル</button>
+    <button id="fileup_submit" class="remodal-confirm">アップロード</button>
+    <?php echo $this->Form->end(); ?>
+</div>

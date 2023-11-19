@@ -1,0 +1,152 @@
+<?php
+$meta_title = Configure::read('html.mypage');
+$meta_keywords = Configure::read('html.mypage');
+$meta_description = Configure::read('html.mypage');
+
+$this->set('title_for_layout',$meta_title);
+$this->Html->meta('keywords', $meta_keywords, array('inline' => false));
+$this->Html->meta('description', $meta_description, array('inline' => false));
+
+$this->Html->css('/css/main02.css', null, array('inline' => false));
+
+
+$this->Html->script('/js/page.js', array('inline' => false));
+
+// 表示件数
+$arrDispNum = Configure::read('arrDispNum');
+
+$code_area = <<< EOF
+$('#disp_num').change(function() {
+$("#ChangeDispNumForm").submit();
+});
+EOF;
+$this->assign('script_area', $code_area);
+?>
+
+<form id="searchForm">
+  <input type="hidden" name="pg" value="<?= $pg ?>" id="pg" />
+</form>
+<nav class="bread-crumbs ">
+  <ul>
+    <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+      <a href="/" itemprop="url">
+        <span itemprop="title">トップ</span>
+      </a>
+      <i class="icon-arrow-right"></i>
+    </li>
+    <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+      <a href="/official" itemprop="url">
+        <span itemprop="title">公認ショップ</span>
+      </a>
+      <i class="icon-arrow-right"></i>
+    </li>
+
+    <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+      <a href="#" itemprop="url">
+        <span itemprop="title">新着商品</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<main class="l-container clearfix">
+  <div class="l-content full-width">
+    <section class="items-box-container clearfix">
+
+      <?php if(!empty($arrDatas['list'])): ?>
+      <h1 class="items-box-head">公式アカウントの新着商品</h1>
+      <div class="items-box-content clearfix category-brand-list">
+        <?php foreach($arrDatas['list'] as $i => $row): ?>
+        <?php
+        $img_url = $this->Upload->uploadUrl($row,'Item.main_image',array('style'=>'list_s'));
+        $img_path = str_replace('//','/',WWW_ROOT.$img_url);
+        if(!file_exists($img_path) || !$img_path || substr_count($img_url, '.') > 1){
+        $img_url = "/img/front_s.png";
+        }
+
+        $item_url = "/item/detail/".$row['Item']['id'];
+        $item_name = mb_strimwidth($row['Item']['title'], 0, 40, "…");
+        $price = number_format($row['Item']['price']);
+        ?>
+        <section class="items-box">
+          <a href="<?= $item_url ?>">
+            <figure class="items-box-photo">
+              <img data-src="<?= $img_url ?>" class=" lazyloaded" alt="ピンキー&amp;ダイアンのブラウス" src="<?= $img_url ?>">
+            </figure>
+            <div class="items-box-body">
+              <h3 class="items-box-name font-2"><?= $item_name ?></h3>
+              <div class="items-box-num">
+                <div class="items-box-price font-5">¥<?= $price ?></div>
+              </div>
+            </div>
+          </a>
+        </section>
+        <?php endforeach; ?>
+      </div>
+      <?php else: ?>
+      <h1 class="items-box-head">データがありません。</h1>
+      <?php endif; ?>
+    </section>
+
+    <ul class="pager">
+      <?php if($pg > 1): ?>
+      <li class="pager-prev visible-pc">
+        <ul>
+          <li class="pager-cell">
+            <a href="#" onclick="toPage(1)">
+              <i class="icon-arrow-double-left"></i>
+            </a>
+          </li>
+          <li class="pager-cell">
+            <a href="#" onclick="toPage(<?=$pg - 1 ?>)">
+              <i class="icon-arrow-left"></i>
+            </a>
+          </li>
+        </ul>
+      </li>
+      <?php endif; ?>
+
+      <li class="pager-num">
+        <ul>
+          <?php for($page=$pgStart; $page<=$pgEnd; $page++): ?>
+
+          <?php if($page == $pg): ?>
+          <li class="pager-cell active">
+            <?= $page ?>
+          </li>
+          <?php else: ?>
+          <li class="pager-cell">
+            <a href="#" onclick="toPage(<?= $page ?>)"><?= $page ?></a>
+          </li>
+          <?php endif; ?>
+
+          <?php endfor; ?>
+        </ul>
+      </li>
+
+      <?php if($pg < $pgTot): ?>
+      <li class="pager-next visible-pc">
+        <ul>
+          <li class="pager-cell">
+            <a href="#" onclick="toPage(<?= $pg + 1?>)">
+              <i class="icon-arrow-right"></i>
+            </a>
+          </li>
+          <li class="pager-cell">
+            <a href="#" onclick="toPage(<?= $pgTot ?>)">
+              <i class="icon-arrow-double-right"></i>
+            </a>
+          </li>
+        </ul>
+      </li>
+      <?php endif; ?>
+    </ul>
+  </div>
+</main>
+
+<script>
+  function toPage(pg) {
+    $('#pg').attr('value', pg);
+    $('#searchForm').submit();
+  }
+</script>

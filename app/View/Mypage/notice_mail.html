@@ -1,0 +1,89 @@
+<?php
+$meta_title = Configure::read('html.mypage');
+$meta_keywords = Configure::read('html.mypage');
+$meta_description = Configure::read('html.mypage');
+
+$this->set('title_for_layout',$meta_title);
+$this->Html->meta('keywords', $meta_keywords, array('inline' => false));
+$this->Html->meta('description', $meta_description, array('inline' => false));
+
+
+$this->Html->css('/css/main02.css', null, array('inline' => false));
+
+$code_area = <<< EOF
+EOF;
+$this->assign('code_area', $code_area);
+?>
+<nav class="bread-crumbs">
+    <ul>
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+            <a href="/" itemprop="url">
+                <span itemprop="title">トップ</span>
+            </a>
+            <i class="icon-arrow-right"></i>
+        </li>
+
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+            <a href="/mypage" itemprop="url">
+                <span itemprop="title">マイページ</span>
+            </a>
+            <i class="icon-arrow-right"></i>
+        </li>
+
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+            <a href="/mypage/notice_mail" itemprop="url">
+                <span itemprop="title">メール通知</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+
+<main class=" l-container clearfix">
+    <div class="l-content">
+        <section class="l-chapter-container mypage-identification">
+            <h2 class="l-chapter-head">メール通知設定</h2>
+
+            <?= $this->Form->create('Member', array('url' => '/mypage/notice_mail/', 'method' => 'post','class' => 'l-single-inner', 'role'=>'form')); ?>
+
+            <div class="form-group">
+                <label>商品が気になるされた時のメール通知</label>
+                <br>
+                <div class="select-wrap">
+                    <i class="icon-arrow-bottom"></i>
+                    <select name="data[Member][notification_to_saller_flag]" class="select-default">
+                        <?php foreach(Configure::read('notice') as $key=>$val): ?>
+                        <?php if ($member['Member']['notification_to_saller_flag'] == $key): ?>
+                        <option value="<?= $key ?>" selected><?= $val ?></option>
+                        <?php else: ?>
+                        <option value="<?= $key ?>"><?= $val ?></option>
+                        <?php endif; ?>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>商品が購入された時のメール通知</label>
+                <br>
+                <div class="select-wrap">
+                    <i class="icon-arrow-bottom"></i>
+                    <select name="data[Member][purchased_to_saller_flag]" class="select-default">
+                        <?php foreach(Configure::read('notice') as $key=>$val): ?>
+                        <?php if ($member['Member']['purchased_to_saller_flag'] == $key): ?>
+                        <option value="<?= $key ?>" selected><?= $val ?></option>
+                        <?php else: ?>
+                        <option value="<?= $key ?>"><?= $val ?></option>
+                        <?php endif; ?>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-default btn-red">登録する</button>
+
+            <?= $this->Form->end(); ?>
+        </section>
+    </div>
+
+    <?= $this->element('mypage_nav', ['strPage' => $strPage]) ?>
+</main>

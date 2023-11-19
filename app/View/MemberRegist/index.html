@@ -1,0 +1,323 @@
+<?php
+$meta_title = Configure::read('html.member');
+$meta_keywords = Configure::read('html.member');
+$meta_description = Configure::read('html.member');
+
+$this->set('title_for_layout',$meta_title);
+$this->Html->meta('keywords', $meta_keywords, array('inline' => false));
+$this->Html->meta('description', $meta_description, array('inline' => false));
+
+
+
+$arrGender = Configure::read('arrGender');
+$arrMailMagFlg = Configure::read('arrMailMagFlg');
+
+$minYear = date('Y')-60;
+$maxYear = date('Y')-10;
+$defYear = date('Y')-20;
+$birthdayOption = array(
+'minYear' => $minYear,
+'maxYear' => $maxYear,
+'separator' => array('<p class="alignleft mr10">年</p>','<p class="alignleft mr10">月</p>','<p class="alignleft mr10">日</p>'),
+'default' => array('year' => $defYear,'month' => 1,'day' => 1),
+'class'=>'datetimeStyle alignleft mr10',
+'monthNames' => false
+);
+
+$code_area = <<< EOF
+EOF;
+$this->assign('code_area', $code_area);
+
+?>
+<div class="single-container">
+  <header class="single-header">
+    <h1>
+      <a href="/">
+        <img src="/yoshida/img/mallento_furimo_LP1.png">
+      </a>
+    </h1>
+
+
+    <nav class="progress-bar signup-bar">
+      <ol class="clearfix">
+        <li class="active">
+          会員情報入力
+          <div class="progress-status"></div>
+        </li>
+
+        <li class="">
+          確認
+          <div class="progress-status"></div>
+        </li>
+        <li class="">
+          完了
+          <div class="progress-status"></div>
+        </li>
+      </ol>
+    </nav>
+  </header>
+
+  <main class="single-main">
+    <section class="l-single-container">
+      <h2 class="l-single-head registration">会員情報入力</h2>
+
+      <?php echo $this->Form->create('Member', array('url' => '/member_regist', 'class' => 'l-single-inner registration-form', 'type' => 'file', )); ?>
+
+        <?php echo $this->Form->input('agree', array('label' => false, 'type' => 'hidden', )) ?>
+        <?php echo $this->Form->input('role', array('label' => false, 'type' => 'hidden', 'value' => $arrData['Member']['role'], )) ?>
+
+        <div class="l-single-content">
+
+          <div class="form-group">
+            <label>氏　名</label>
+            <span class="form-require">必須</span>
+            <?php if(isset($errors['name'][0])): ?>
+            <?php echo $this->Form->input('name', array('label' => false, 'div' => false, 'type' => 'text', 'class' => 'input-default has-error', 'value' => $arrData['Member']['name'], )) ?>
+            <?php else: ?>
+            <?php echo $this->Form->input('name', array('label' => false, 'div' => false, 'type' => 'text', 'class' => 'input-default', 'value' => $arrData['Member']['name'], )) ?>
+            <?php endif; ?>
+          </div>
+
+          <div class="form-group">
+            <label>氏　名（フリガナ）</label>
+            <span class="form-require">必須</span>
+            <?php if(isset($errors['name_kana'][0])): ?>
+            <?php echo $this->Form->input('name_kana', array('label' => false, 'div' => false, 'type' => 'text', 'class' => 'input-default has-error', 'value' => $arrData['Member']['name_kana'], )) ?>
+            <?php else: ?>
+            <?php echo $this->Form->input('name_kana', array('label' => false, 'div' => false, 'type' => 'text', 'class' => 'input-default', 'value' => $arrData['Member']['name_kana'], )) ?>
+            <?php endif; ?>
+
+          </div>
+
+          <div class="form-group">
+            <label>会社名</label>
+            <?php if(isset($errors['company'][0])): ?>
+            <?php echo $this->Form->input('company', array('label' => false, 'div' => false, 'type' => 'text', 'class' => 'input-default has-error', 'value' => $arrData['Member']['company'], )) ?>
+            <?php else: ?>
+            <?php echo $this->Form->input('company', array('label' => false, 'div' => false, 'type' => 'text', 'class' => 'input-default', 'value' => $arrData['Member']['company'], )) ?>
+            <?php endif; ?>
+
+          </div>
+
+          <div class="form-group">
+            <label>郵便番号</label>
+            <span class="form-require">必須</span>
+            <?php if(isset($errors['postcode'][0])): ?>
+            <?php echo $this->Form->input('postcode', array('label' => false, 'div' => false, 'type' => 'text', 'class' => 'input-default has-error', 'value' => $arrData['Member']['postcode'], )) ?>
+            <?php else: ?>
+            <?php echo $this->Form->input('postcode', array('label' => false, 'div' => false, 'type' => 'text', 'class' => 'input-default', 'value' => $arrData['Member']['postcode'], )) ?>
+            <?php endif;?>
+
+          </div>
+
+          <div class="form-group">
+            <label>住　所</label>
+            <span class="form-require">必須</span>
+            <?php if(isset($errors['address'][0])): ?>
+            <?php echo $this->Form->input('address', array('label' => false, 'div' => false, 'type' => 'text', 'class' => 'input-default has-error', 'value' => $arrData['Member']['address'], )) ?>
+            <?php else: ?>
+            <?php echo $this->Form->input('address', array('label' => false, 'div' => false, 'type' => 'text', 'class' => 'input-default', 'value' => $arrData['Member']['address'], )) ?>
+            <?php endif; ?>
+
+          </div>
+
+          <div class="form-group">
+            <label>電話番号</label>
+            <span class="form-require">必須</span>
+            <?php if(isset($errors['phone'][0])): ?>
+            <?php echo $this->Form->input('phone', array('label' => false, 'div' => false, 'type' => 'text', 'class' => 'input-default has-error', 'value' => $arrData['Member']['phone'], )) ?>
+            <?php else: ?>
+            <?php echo $this->Form->input('phone', array('label' => false, 'div' => false, 'type' => 'text', 'class' => 'input-default', 'value' => $arrData['Member']['phone'], )) ?>
+            <?php endif; ?>
+          </div>
+
+          <div class="form-group">
+            <label>性　別</label>
+            <span class="form-require">必須</span>
+            <br>
+            <div class="birthday-select-wrap">
+              <div class="select-wrap">
+                <i class="icon-arrow-bottom"></i>
+                <select name="data[Member][gender]" class="select-default">
+                  <?php if ($arrData['Member']['gender'] == 'male'): ?>
+                  <option value="male" selected>男性</option>
+                  <?php else: ?>
+                  <option value="male">男性</option>
+                  <?php endif; ?>
+                  <?php if ($arrData['Member']['gender'] == 'female'): ?>
+                  <option value="female" selected>女性</option>
+                  <?php else: ?>
+                  <option value="female">女性</option>
+                  <?php endif; ?>
+                </select>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="form-group">
+            <label for="birthday">生年月日</label>
+            <span class="form-require">必須</span>
+            <br>
+            <div class="birthday-select-wrap">
+              <div class="select-wrap">
+                <i class="icon-arrow-bottom"></i>
+                <?php if(isset($errors['birthday'][0])): ?>
+                <select name="data[Member][birthday][year]" class="select-default has-error" aria-describedby="birthday-error" aria-invalid="true">
+                <?php else: ?>
+                <select name="data[Member][birthday][year]" class="select-default" aria-describedby="birthday-error" aria-invalid="true">
+                <?php endif; ?>
+                  <?php if($arrData['Member']['birthday']['year'] == ''): ?>
+                  <option value="" selected>--</option>
+                  <?php else: ?>
+                  <option value="">--</option>
+                  <?php endif; ?>
+                  <?php for($y = $maxYear; $y >= $minYear; $y--): ?>
+                  <?php if($arrData['Member']['birthday']['year'] == $y): ?>
+                    <option value="<?= $y ?>" selected><?= $y ?></option>
+                  <?php else: ?>
+                    <option value="<?= $y ?>"><?= $y ?></option>
+                  <?php endif; ?>
+                  <?php endfor; ?>
+                </select>
+              </div>
+              <span>年</span>
+              <div class="select-wrap select-wrap__month">
+                <i class="icon-arrow-bottom"></i>
+                <?php if(isset($errors['birthday'][0])): ?>
+                <select name="data[Member][birthday][month]" class="select-default has-error" aria-describedby="birthday-error" aria-invalid="true">
+                <?php else: ?>
+                <select name="data[Member][birthday][month]" class="select-default" aria-describedby="birthday-error" aria-invalid="true">
+                <?php endif; ?>
+                  <?php if($arrData['Member']['birthday']['month'] == ''): ?>
+                  <option value="" selected>--</option>
+                  <?php else: ?>
+                  <option value="">--</option>
+                  <?php endif; ?>
+                  <?php for($m = 1; $m <= 12; $m++): ?>
+                  <?php if($arrData['Member']['birthday']['month'] == str_pad($m, 2, '0', STR_PAD_LEFT)): ?>
+                  <option value="<?= str_pad($m, 2, '0', STR_PAD_LEFT) ?>" selected><?= str_pad($m, 2, '0', STR_PAD_LEFT) ?></option>
+                  <?php else: ?>
+                  <option value="<?= str_pad($m, 2, '0', STR_PAD_LEFT) ?>"><?= str_pad($m, 2, '0', STR_PAD_LEFT) ?></option>
+                  <?php endif; ?>
+                  <?php endfor; ?>
+                </select>
+              </div>
+              <span>月</span>
+              <div class="select-wrap select-wrap__day">
+                <i class="icon-arrow-bottom"></i>
+                <?php if(isset($errors['birthday'][0])): ?>
+                <select name="data[Member][birthday][day]" class="select-default has-error" aria-describedby="birthday-error" aria-invalid="true">
+                <?php else: ?>
+                <select name="data[Member][birthday][day]" class="select-default" aria-describedby="birthday-error" aria-invalid="true">
+                <?php endif; ?>
+                  <?php if($arrData['Member']['birthday']['day'] == ''): ?>
+                  <option value="" selected>--</option>
+                  <?php else: ?>
+                  <option value="">--</option>
+                  <?php endif; ?>
+                  <?php for($d = 1; $d <= 31; $d++): ?>
+                  <?php if($arrData['Member']['birthday']['day'] == str_pad($d, 2, '0', STR_PAD_LEFT)): ?>
+                  <option value="<?= str_pad($d, 2, '0', STR_PAD_LEFT) ?>" selected><?= str_pad($d, 2, '0', STR_PAD_LEFT) ?></option>
+                  <?php else: ?>
+                  <option value="<?= str_pad($d, 2, '0', STR_PAD_LEFT) ?>"><?= str_pad($d, 2, '0', STR_PAD_LEFT) ?></option>
+                  <?php endif; ?>
+                  <?php endfor; ?>
+                </select>
+              </div>
+              <span>日</span>
+            </div>
+
+            <div class="clearfix">
+            </div>
+
+          </div>
+
+          <div class="form-group">
+            <label>ニックネーム</label>
+            <span class="form-require">必須</span>
+            <?php if(isset($errors['nickname'][0])): ?>
+            <?php echo $this->Form->input('nickname', array('label' => false, 'div' => false, 'type' => 'text', 'class' => 'input-default has-error', 'value' => $arrData['Member']['nickname'], )) ?>
+            <?php else: ?>
+            <?php echo $this->Form->input('nickname', array('label' => false, 'div' => false, 'type' => 'text', 'class' => 'input-default', 'value' => $arrData['Member']['nickname'], )) ?>
+            <?php endif; ?>
+
+          </div>
+
+          <div class="form-group">
+            <label>プロフィール紹介文</label>
+            <?php if(isset($errors['comment'][0])): ?>
+            <?php echo $this->Form->input('comment', array('label' => false, 'div' => false, 'type' => 'text', 'rows' => 5, 'class' => 'input-default has-error', 'value' => $arrData['Member']['comment'], )) ?>
+            <?php else: ?>
+            <?php echo $this->Form->input('comment', array('label' => false, 'div' => false, 'type' => 'text', 'rows' => 5, 'class' => 'input-default', 'value' => $arrData['Member']['comment'], )) ?>
+            <?php endif; ?>
+
+          </div>
+
+          <div class="form-group">
+            <label>メールアドレス</label>
+            <span class="form-require">必須</span>
+            <?php if(isset($errors['email'][0])): ?>
+            <?php echo $this->Form->input('email', array('label' => false, 'div' => false, 'type' => 'text', 'class' => 'input-default has-error', 'value' => $arrData['Member']['email'], )) ?>
+            <?php else: ?>
+            <?php echo $this->Form->input('email', array('label' => false, 'div' => false, 'type' => 'text', 'class' => 'input-default', 'value' => $arrData['Member']['email'], )) ?>
+            <?php endif; ?>
+          </div>
+
+          <div class="form-group">
+            <label>メールアドレス確認</label>
+            <span class="form-require">必須</span>
+            <?php if(isset($errors['email_confirm'][0])): ?>
+            <?php echo $this->Form->input('email_confirm', array('label' => false, 'div' => false, 'type' => 'text', 'class' => 'input-default has-error', 'value' => $arrData['Member']['email_confirm'], )) ?>
+            <?php else: ?>
+            <?php echo $this->Form->input('email_confirm', array('label' => false, 'div' => false, 'type' => 'text', 'class' => 'input-default', 'value' => $arrData['Member']['email_confirm'], )) ?>
+            <?php endif; ?>
+          </div>
+
+          <div class="form-group">
+            <label>パスワード</label>
+            <span class="form-require">必須</span>
+            <?php if(isset($errors['password'][0])): ?>
+            <?php echo $this->Form->input('password', array('label' => false, 'div' => false, 'type' => 'password', 'class' => 'input-default has-error', 'value' => $arrData['Member']['password'], )) ?>
+            <?php else: ?>
+            <?php echo $this->Form->input('password', array('label' => false, 'div' => false, 'type' => 'password', 'class' => 'input-default', 'value' => $arrData['Member']['password'], )) ?>
+            <?php endif; ?>
+          </div>
+
+          <div class="form-group">
+            <label>パスワード確認</label>
+            <span class="form-require">必須</span>
+            <?php if(isset($errors['password_confirm'][0])): ?>
+            <?php echo $this->Form->input('password_confirm', array('label' => false, 'div' => false, 'type' => 'password', 'class' => 'input-default has-error', 'value' => $arrData['Member']['password_confirm'], )) ?>
+            <?php else: ?>
+            <?php echo $this->Form->input('password_confirm', array('label' => false, 'div' => false, 'type' => 'password', 'class' => 'input-default', 'value' => $arrData['Member']['password_confirm'], )) ?>
+            <?php endif; ?>
+
+          </div>
+
+          <div class="form-group">
+            <label>パスワードのヒント</label>
+            <?php if(isset($errors['password_hint'][0])): ?>
+            <?php echo $this->Form->input('password_hint', array('label' => false, 'div' => false, 'type' => 'text', 'class' => 'input-default has-error', 'value' => $arrData['Member']['password_hint'], )) ?>
+            <?php else: ?>
+            <?php echo $this->Form->input('password_hint', array('label' => false, 'div' => false, 'type' => 'text', 'class' => 'input-default', 'value' => $arrData['Member']['password_hint'], )) ?>
+            <?php endif; ?>
+            
+          </div>
+        </div>
+
+        <div class="l-single-content" style="margin-top: 18px; margin-bottom: 18px">
+
+          <div class="form-group" style="margin-bottom: 18px">
+            <p class="l-single-text text-center">
+              「次へ進む」のボタンを押すことにより、<a href="/jp/tos_list/" target="_blank">利用規約</a>に同意したものとみなします
+            </p>
+          </div>
+
+          <button type="submit" class="btn-default btn-red">次へ進む</button>
+
+        </div>
+      </form>
+    </section>
+  </main>
+</div>

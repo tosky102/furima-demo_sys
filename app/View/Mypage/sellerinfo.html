@@ -1,0 +1,98 @@
+<?php
+$meta_title = Configure::read('html.mypage');
+$meta_keywords = Configure::read('html.mypage');
+$meta_description = Configure::read('html.mypage');
+
+$this->set('title_for_layout',$meta_title);
+$this->Html->meta('keywords', $meta_keywords, array('inline' => false));
+$this->Html->meta('description', $meta_description, array('inline' => false));
+
+$this->Html->css('/css/main02.css', null, array('inline' => false));
+
+
+$this->Html->script('/js/follower.js', array('inline' => false));
+
+$code_area = <<< EOF
+function post_message(url){
+current_id = '$currentMemberId';
+member_id = '$login_member_id';
+if(current_id == member_id){
+alert('自身へメッセージは送れません');
+}else{
+$(location).attr('href',url);
+}
+}
+
+EOF;
+$this->assign('script_area', $code_area);
+?>
+
+<nav class="bread-crumbs ">
+    <ul>
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+            <a href="/" itemprop="url">
+                <span itemprop="title">トップ</span>
+            </a>
+            <i class="icon-arrow-right"></i>
+        </li>
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+            <span itemprop="title"><?php echo h($arrMemberInfo['Member']['company']) ?> <?php echo h($arrMemberInfo['Member']['nickname']) ?></span>
+        </li>
+    </ul>
+</nav>
+
+<section class="user-details l-single-container">
+    <div class="users-detail-profile-box">
+        <div class="users-detail-photo_box text-center">
+            <div class="users-detail-photo">
+                <?php if(!empty($arrMemberInfo['Member']['image_file_name'])): ?>
+                <?php echo $this->Upload->uploadImage($arrMemberInfo,'Member.image',array('style'=>'thumb')); ?>
+                <?php else: ?>
+                <?php echo '<img src="/img/front_s.png" alt="画像">'; ?>
+                <?php endif; ?>
+            </div>
+            <h2 class="users-detail-title font-6"><?php echo h($arrMemberInfo['Member']['company']) ?> <?php echo h($arrMemberInfo['Member']['nickname']) ?></h2>
+
+            <div class="users-detail-score font-3">
+                <?php if(!empty($loginname)): ?>
+                <button onClick="add_follow('<?php echo $arrMemberInfo['Member']['id'] ?>');return false;">フォローする</button>
+                <button onClick="post_message('/message/new_message/<?php echo $arrMemberInfo['Member']['id'] ?>');return false;">メッセージを送る</button>
+                <?php else: ?>
+                <button onclick="notlogin(); return false;">フォローする</button>
+                <button onclick="notlogin(); return false;">メッセージを送る</button>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+
+    <div class="white">
+        <div class="users-detail-description_box">
+            <p class="font-2"><?= nl2br(h($arrMemberInfo['Member']['comment'])) ?></p>
+        </div>
+    </div>
+    <?php if(!empty($arrSaleReport)): ?>
+    <section class="iitems-box-container clearfix items-box-overflow">
+        <h2 class="items-box-head">
+            この出品者の人気商品
+        </h2>
+        <div class="items-box-content clearfix">
+            <?php foreach($arrSaleReport as $row): ?>
+            <?= $this->element('item_02', ['row' => $row]) ?>
+            <?php endforeach; ?>
+        </div>
+    </section>
+    <?php endif; ?>
+    
+    <?php if(!empty($arrItemList)): ?>
+    <section class="iitems-box-container clearfix items-box-overflow">
+        <h2 class="items-box-head">
+            この出品者の商品一覧
+        </h2>
+        <div class="items-box-content clearfix">
+            <?php foreach($arrItemList as $row): ?>
+            <?= $this->element('item_02', ['row' => $row]) ?>
+            <?php endforeach; ?>
+        </div>
+    </section>
+    <?php endif; ?>
+</section>

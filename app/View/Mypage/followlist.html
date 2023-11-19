@@ -1,0 +1,123 @@
+<?php
+$meta_title = Configure::read('html.mypage');
+$meta_keywords = Configure::read('html.mypage');
+$meta_description = Configure::read('html.mypage');
+
+$this->set('title_for_layout',$meta_title);
+$this->Html->meta('keywords', $meta_keywords, array('inline' => false));
+$this->Html->meta('description', $meta_description, array('inline' => false));
+
+$this->Html->css('/css/main02.css', null, array('inline' => false));
+$this->Html->script('/js/page.js', array('inline' => false));
+
+// 表示件数
+$arrDispNum = Configure::read('arrDispNum');
+
+$code_area = <<< EOF
+    $('#disp_num').change(function() {
+      $("#ChangeDispNumForm").submit();
+    });
+EOF;
+$this->assign('script_area', $code_area);
+?>
+
+<?php
+$meta_title = Configure::read('html.mypage');
+$meta_keywords = Configure::read('html.mypage');
+$meta_description = Configure::read('html.mypage');
+
+$this->set('title_for_layout',$meta_title);
+$this->Html->meta('keywords', $meta_keywords, array('inline' => false));
+$this->Html->meta('description', $meta_description, array('inline' => false));
+
+$this->Html->css('/css/main02.css', null, array('inline' => false));
+$this->Html->script('/js/page.js', array('inline' => false));
+
+// 表示件数
+$arrDispNum = Configure::read('arrDispNum');
+
+$code_area = <<< EOF
+$('#disp_num').change(function() {
+$("#ChangeDispNumForm").submit();
+});
+EOF;
+$this->assign('script_area', $code_area);
+?>
+
+<nav class="bread-crumbs">
+    <ul>
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+            <a href="/" itemprop="url">
+                <span itemprop="title">トップ</span>
+            </a>
+            <i class="icon-arrow-right"></i>
+        </li>
+
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+            <a href="/mypage" itemprop="url">
+                <span itemprop="title">マイページ</span>
+            </a>
+            <i class="icon-arrow-right"></i>
+        </li>
+
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+            <a href="/mypage/followlist" itemprop="url">
+                <span itemprop="title">フォロー</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+
+<main class=" l-container clearfix">
+    <div class="l-content">
+        <section class="mypage-tab-container">
+            <ul class="listing-tabs">
+                <li class="listing-col-2">
+                    <h3><a href="/mypage/followerlist">フォロワー</a></h3>
+                </li>
+
+                <li class="listing-col-2 active">
+                    <h3><a href="#mypage-tab-follow-list" data-toggle="tab">フォロー</a></h3>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <ul id="mypage-tab-follow-list" class="mypage-item-list tab-pane active">
+                    <?php if(count($arrData['list'] ) > 0): ?>
+                    <?php foreach($arrData['list']  as $row): ?>
+                    <li>
+                        <a href="/mypage/sellerinfo/<?php echo h($row['FollowMember']['id']) ?>" class="mypage-item-link">
+
+                            <?php $img_url = $this->Image->upload_resize('members', $row['FollowMember']['id'], $row['FollowMember']['image_file_name'], 'list_s'); ?>
+
+                            <?php $img_path = str_replace(WWW_ROOT,'/',$img_url); ?>
+                            <?php if(!file_exists($img_path) || !$img_path || substr_count($img_url, '.') > 1): ?>
+                            <?php $img_url = "/img/front_s.png"; ?>
+                            <?php endif; ?>
+                            <?php if(!empty($row['FollowMember']['company'])): ?>
+                            <?php $item_name = h($row['FollowMember']['company']); ?>
+                            <?php else: ?>
+                            <?php $item_name = h($row['FollowMember']['nickname']); ?>
+                            <?php endif; ?>
+                            <figure>
+                                <img class=" lazyloaded" alt="<?php echo h($row['FollowMember']['name']) ?>" src="<?= $img_url ?>">
+                            </figure>
+                            <div class="mypage-item-body">
+                                <div class="mypage-item-text"><?= $item_name ?></div>
+                                <time><i class="icon-time"></i><span><?= date("Y年m月d日 h:i:s", strtotime($row['Follower']['created'])) ?></span></time>
+                            </div>
+                            <i class="icon-arrow-right"></i>
+                        </a>
+                    </li>
+                    <?php endforeach; ?>
+                    <?php else: ?>
+                    <li class="mypage-item-not-found bold">該当する情報がありません。</li>
+                    <?php endif; ?>
+                </ul>
+            </div>
+        </section>
+
+    </div>
+
+    <?= $this->element('mypage_nav', ['strPage' => $strPage]) ?>
+</main>
+

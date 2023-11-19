@@ -1,0 +1,37 @@
+<?php
+$meta_title = Configure::read('html.contact');
+$meta_keywords = Configure::read('html.contact');
+$meta_description = Configure::read('html.contact');
+
+$this->set('title_for_layout',$meta_title);
+$this->Html->meta('keywords', $meta_keywords, array('inline' => false));
+$this->Html->meta('description', $meta_description, array('inline' => false));
+
+$code_area = <<< EOF
+EOF;
+$this->assign('code_area', $code_area);
+?>
+
+
+<nav class="bread-crumbs ">
+  <ul>
+    <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+      <a href="/" itemprop="url">
+        <span itemprop="title">トップ</span>
+      </a>
+      <i class="icon-arrow-right"></i>
+    </li>
+    <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+      <span itemprop="title">お問い合わせ</span>
+    </li>
+  </ul>
+</nav>
+
+<section class="static-page">
+  <h2 id="privacy">お問い合わせ</h2>
+  <div class="static-page-content">
+    <section>
+      <?php echo $HTML_GUIDE_CONTACT ?>
+    </section>
+  </div>
+</section>

@@ -1,0 +1,53 @@
+<?php
+$meta_title = 'ログイン';
+$meta_keywords = Configure::read('html.login');
+$meta_description = Configure::read('html.login');
+
+$this->set('title_for_layout',$meta_title);
+$this->Html->meta('keywords', $meta_keywords, array('inline' => false));
+$this->Html->meta('description', $meta_description, array('inline' => false));
+?>
+
+<div class="single-container">
+    <header class="single-header">
+        <h1>
+            <a href="/">
+                <img src="/yoshida/img/mallento_furimo_LP1.png">
+            </a>
+        </h1>
+    </header>
+
+    <main class="single-main" style="margin-bottom: 20px;">
+        <div class="login-panel">
+
+            <div class="login-no-account">
+                <p>アカウントをお持ちでない方はこちら</p>
+                <a href="/member_regist">新規会員登録</a>
+            </div>
+
+
+            <form action="/mypage/login/" method="POST" novalidate="novalidate">
+
+                <div class="login-form-inner">
+                    <p class="text-red"><?php echo $this->Session->flash('auth'); ?></p>
+
+                    <div class="form-group">
+                        <input type="email" name="data[Member][user_id]" value="" placeholder="メールアドレス" class="login-input-text input-default">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="password" name="data[Member][password]" placeholder="パスワード" class="login-input-text input-default">
+                    </div>
+
+                    <button type="submit" class="login-submit btn-default btn-red">ログイン</button>
+
+
+                    <a href="/member_regist/reissue/">パスワードをお忘れの方</a>
+                </div>
+            </form>
+        </div>
+
+
+    </main>
+
+</div>

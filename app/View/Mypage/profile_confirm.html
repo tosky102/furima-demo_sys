@@ -1,0 +1,185 @@
+<?php
+$meta_title = Configure::read('html.register');
+$meta_keywords = Configure::read('html.register');
+$meta_description = Configure::read('html.register');
+
+$this->set('title_for_layout',$meta_title);
+$this->Html->meta('keywords', $meta_keywords, array('inline' => false));
+$this->Html->meta('description', $meta_description, array('inline' => false));
+
+$this->Html->css('/css/main02.css', null, array('inline' => false));
+
+$arrGender = Configure::read('arrGender');
+$arrMailMagFlg = Configure::read('arrMailMagFlg');
+
+$code_area = <<< EOF
+EOF;
+$this->assign('code_area', $code_area);
+?>
+
+<nav class="bread-crumbs">
+  <ul>
+    <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+      <a href="/" itemprop="url">
+        <span itemprop="title">トップ</span>
+      </a>
+      <i class="icon-arrow-right"></i>
+    </li>
+
+    <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+      <a href="/mypage" itemprop="url">
+        <span itemprop="title">マイページ</span>
+      </a>
+      <i class="icon-arrow-right"></i>
+    </li>
+
+    <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+      <a href="/mypage/profile" itemprop="url">
+        <span itemprop="title">プロフィール</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<main class=" l-container clearfix">
+  <div class="l-content">
+
+    <?php if($arrData['Member']['mode'] == 'profile'): ?>
+    <section class="l-chapter-container mypage-identification">
+      <h2 class="l-chapter-head">本人情報の登録</h2>
+
+      <?php echo $this->Form->create('Member', array('url' => '/mypage/profile_confirm', 'class' => 'l-single-inner', 'type' => 'file', )); ?>
+
+      <div class="form-group">
+        <label>氏名</label>
+        <p><?php echo h($arrData['Member']['name']) ?></p>
+      </div>
+
+      <div class="form-group">
+        <label>氏名(フリガナ)</label>
+        <p><?php echo h($arrData['Member']['name_kana']) ?></p>
+      </div>
+
+      <div class="form-group">
+        <label>会社名</label>
+        <p><?php echo h($arrData['Member']['company']) ?></p>
+      </div>
+
+      <div class="form-group">
+        <label>郵便番号</label>
+        <p><?php echo h($arrData['Member']['postcode']) ?></p>
+      </div>
+
+      <div class="form-group">
+        <label>住所</label>
+        <p><?php echo h($arrData['Member']['address']) ?></p>
+      </div>
+
+      <div class="form-group">
+        <label>電話番号</label>
+        <p><?php echo h($arrData['Member']['phone']) ?></p>
+      </div>
+
+      <div class="form-group">
+        <label>性　別</label>
+        <p><?php echo @$arrGender[$arrData['Member']['gender']] ?></p>
+      </div>
+
+      <div class="form-group">
+        <label>生年月日</label>
+        <p><?php echo $arrData['Member']['birthday']['year'].'/'.$arrData['Member']['birthday']['month'].'/'.$arrData['Member']['birthday']['day'] ?></p>
+      </div>
+
+      <div class="form-group">
+        <label>ニックネーム</label>
+        <p><?php echo h($arrData['Member']['nickname']) ?></p>
+      </div>
+
+      <div class="form-group">
+        <label>プロフィール紹介文</label>
+        <p><?php echo h($arrData['Member']['comment']) ?></p>
+      </div>
+
+      <div class="form-group">
+        <label>メールマガジン</label>
+        <p><?php echo @$arrMailMagFlg[$arrData['Member']['mailmag_flg']] ?></p>
+      </div>
+
+      <div class="form-group">
+        <label>銀行名</label>
+        <p><?php echo h($arrData['Member']['bank_name']) ?></p>
+      </div>
+
+      <div class="form-group">
+        <label>支店名</label>
+        <p><?php echo h($arrData['Member']['branch_name']) ?></p>
+      </div>
+
+      <div class="form-group">
+        <label>支店コード</label>
+        <p><?php echo h($arrData['Member']['branch_code']) ?></p>
+      </div>
+
+      <div class="form-group">
+        <label>銀行口座</label>
+        <p><?php echo h($arrData['Member']['account_no']) ?></p>
+      </div>
+
+      <div class="form-group">
+        <label>口座名義</label>
+        <p><?php echo h($arrData['Member']['deposit_name']) ?></p>
+      </div>
+
+      <button type="submit" class="btn-default btn-red">確認する</button>
+
+      </form>
+    </section>
+    <?php endif; ?>
+
+    <?php if($arrData['Member']['mode'] == 'email'): ?>
+    <section class="l-chapter-container mypage-identification">
+      <h2 class="l-chapter-head">メールアドレス変更</h2>
+
+      <?php echo $this->Form->create('Member', array('url' => '/mypage/profile_confirm', 'class' => 'l-single-inner', 'type' => 'file', )); ?>
+      <?php echo $this->Form->input('id', array('label' => false, 'type' => 'hidden', 'value' => $arrData['Member']['id'], )) ?>
+      <?php echo $this->Form->input('mode', array('label' => false, 'type' => 'hidden', 'value' => 'email', )) ?>
+
+      <div class="form-group">
+        <label>メールアドレス</label>
+        <p><?php echo h($arrData['Member']['email']) ?></p>
+      </div>
+
+      <button type="submit" class="btn-default btn-red">確認する</button>
+
+      <?php echo $this->Form->end(); ?>
+    </section>
+    <?php endif; ?>
+
+    <?php if($arrData['Member']['mode'] == 'password'): ?>
+    <section class="l-chapter-container mypage-identification">
+      <h2 class="l-chapter-head">パスワード変更</h2>
+
+      <?php echo $this->Form->create('Member', array('url' => '/mypage/profile_confirm', 'class' => 'l-single-inner', 'type' => 'file', )); ?>
+      <?php echo $this->Form->input('id', array('label' => false, 'type' => 'hidden', 'value' => $arrData['Member']['id'], )) ?>
+      <?php echo $this->Form->input('mode', array('label' => false, 'type' => 'hidden', 'value' => 'email', )) ?>
+
+      <div class="form-group">
+        <label>パスワード</label>
+        <p> ***** </p>
+      </div>
+
+      <div class="form-group">
+        <label>パスワードのヒント</label>
+        <p><?php echo h($arrData['Member']['password_hint']) ?></p>
+      </div>
+
+      <button type="submit" class="btn-default btn-red">確認する</button>
+
+      <?php echo $this->Form->end(); ?>
+    </section>
+    <?php endif; ?>
+  </div>
+
+  <?= $this->element('mypage_nav', ['strPage' => $strPage]) ?>
+</main>
+

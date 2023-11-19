@@ -1,0 +1,25 @@
+<?php
+      $img_url = $this->Upload->uploadUrl($row,'Item.main_image',array('style'=>'list_s'));
+      $img_path = str_replace('//','/',WWW_ROOT.$img_url);
+      if(!file_exists($img_path) || !$img_path || substr_count($img_url, '.') > 1){
+        $img_url = "/img/front_s.png";
+      }
+      $item_url = "/item/detail/".$row['Item']['id'];
+      $title = mb_strimwidth($row['Item']['title'], 0, 40, "…");
+      $price = number_format($row['Item']['price']);
+      $user_url = "/mypage/sellerinfo/".$row['Item']['member_id'];
+?>
+
+<section class="items-box">
+    <a href="<?= $item_url ?>">
+        <figure class="items-box-photo">
+            <img data-src="<?= $img_url ?>" class=" lazyloaded" alt="細ベルト" src="<?= $img_url ?>">
+        </figure>
+        <div class="items-box-body">
+            <h3 class="items-box-name font-2"><?= $title ?></h3>
+            <div class="items-box-num">
+                <div class="items-box-price font-5">¥<?= $price ?></div>
+            </div>
+        </div>
+    </a>
+</section>

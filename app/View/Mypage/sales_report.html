@@ -1,0 +1,79 @@
+<?php
+$meta_title = Configure::read('html.mypage');
+$meta_keywords = Configure::read('html.mypage');
+$meta_description = Configure::read('html.mypage');
+
+$this->set('title_for_layout',$meta_title);
+$this->Html->meta('keywords', $meta_keywords, array('inline' => false));
+$this->Html->meta('description', $meta_description, array('inline' => false));
+
+$this->Html->css('/css/main02.css', null, array('inline' => false));
+
+$code_area = <<< EOF
+EOF;
+$this->assign('code_area', $code_area);
+?>
+<nav class="bread-crumbs">
+  <ul>
+    <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+      <a href="/" itemprop="url">
+        <span itemprop="title">トップ</span>
+      </a>
+      <i class="icon-arrow-right"></i>
+    </li>
+    <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+      <a href="/mypage" itemprop="url">
+        <span itemprop="title">マイページ</span>
+      </a>
+      <i class="icon-arrow-right"></i>
+    </li>
+
+    <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+      <a href="/mypage/sales_report" itemprop="url">
+        <span itemprop="title">売上レポート</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<main class=" l-container clearfix">
+  <div class="l-content">
+    <section class="mypage-tab-container">
+      <h2 class="mypage-tab-head">売上レポート</h2>
+
+      <ul class="mypage-item-list tab-pane active">
+        <?php if(!empty($arrData)): ?>
+        <?php foreach($arrData as $row): ?>
+        <li>
+          <a href="/mypage/sale_ym/<?php echo $row['sale_ym'] ?>" class="mypage-item-link">
+            <?php
+              $len_per = 0;
+              if($row['total'] > 0 && $intMaxTotal > 0){
+                $len_per = $row['total'] / $intMaxTotal * 100 ;
+              }
+            ?>
+
+            <div class="mypage-item-body-left">
+              <div class="mypage-item-text">
+                <?php echo substr($row['sale_ym'],0,4) ?>年<?php echo substr($row['sale_ym'],4,2) ?>月
+                <p><?= $row['count'] ?>件</p>
+              </div>
+            </div>
+
+
+            <div class="mypage-item-right-part">
+              ￥<?php echo number_format($row['total']) ?>
+            </div>
+          </a>
+        </li>
+        <?php endforeach; ?>
+        <?php else: ?>
+        <li class="mypage-item-not-found bold">購入した商品がありません</li>
+        <?php endif; ?>
+      </ul>
+    </section>
+
+  </div>
+
+  <?= $this->element('mypage_nav', ['strPage' => $strPage]) ?>
+</main>

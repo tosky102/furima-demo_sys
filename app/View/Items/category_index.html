@@ -1,0 +1,77 @@
+<?php
+$meta_title = Configure::read('html.category');
+$meta_keywords = Configure::read('html.category');
+$meta_description = Configure::read('html.category');
+
+$this->set('title_for_layout',$meta_title);
+$this->Html->meta('keywords', $meta_keywords, array('inline' => false));
+$this->Html->meta('description', $meta_description, array('inline' => false));
+
+$this->Html->script('/js/page.js', array('inline' => false));
+
+$code_area = <<< EOF
+EOF;
+$this->assign('script_area', $code_area);
+?>
+
+<nav class="bread-crumbs">
+  <ul>
+    <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+      <a href="/" itemprop="url">
+        <span itemprop="title">トップ</span>
+      </a>
+      <i class="icon-arrow-right"></i>
+    </li>
+    <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+      <span itemprop="title">カテゴリー一覧</span>
+    </li>
+  </ul>
+</nav>
+
+<div class="category-index l-single-container">
+
+  <div class="gray"><h2>カテゴリー一覧</h2></div>
+  <div class="category-list-nav slide-nav-parent text-center clearfix">
+    <?php foreach($arrCategory as $key => $name): ?>
+    <a href="#<?= $key ?>" class="white category-root-category-link-name">
+      <div><?= $key ?></div>
+    </a>
+
+    <?php endforeach; ?>
+
+  </div>
+
+  <?php foreach($arrCategory as $key=>$array): ?>
+  <div class="category-list-box">
+    <div class="category-list-individual-box white clearfix">
+      <div class="red font-white category-list-individual-box-root-category-name">
+        <h3 id="<?= $key ?>"><?= $key ?></h3>
+      </div>
+      <div class="category-list-individual-box-inner-box">
+        <div class="clearfix category-list-individual-box-sub-sub-category-box">
+          <div class="category-list-individual-box-sub-sub-category-name">
+            <p>
+              <a href="/item/category/<?= $key ?>/">
+                すべて
+              </a>
+            </p>
+          </div>
+
+          <?php foreach($array as $key1 => $val1) : ?>
+          <?php if($key1 == $key) { continue; } ?>
+          <div class="category-list-individual-box-sub-sub-category-name">
+            <p>
+              <a href="/item/category/<?= $key1 ?>">
+                <?= substr($val1, 3) ?>
+              </a>
+            </p>
+          </div>
+          <?php endforeach; ?>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <?php endforeach; ?>
+
+</div>

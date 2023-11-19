@@ -1,0 +1,69 @@
+<?php
+$meta_title = Configure::read('html.mypage');
+$meta_keywords = Configure::read('html.mypage');
+$meta_description = Configure::read('html.mypage');
+
+$this->set('title_for_layout',$meta_title);
+$this->Html->meta('keywords', $meta_keywords, array('inline' => false));
+$this->Html->meta('description', $meta_description, array('inline' => false));
+
+$this->Html->css('/css/main02.css', null, array('inline' => false));
+
+
+$code_area = <<< EOF
+EOF;
+$this->assign('script_area', $code_area);
+?>
+
+
+<nav class="bread-crumbs">
+  <ul>
+    <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+      <a href="/" itemprop="url">
+        <span itemprop="title">トップ</span>
+      </a>
+      <i class="icon-arrow-right"></i>
+    </li>
+
+    <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+      <a href="/message" itemprop="url">
+        <span itemprop="title">メッセージ</span>
+      </a>
+      <i class="icon-arrow-right"></i>
+    </li>
+
+    <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+      <a href="/message/sendinglist" itemprop="url">
+        <span itemprop="title">送信一覧</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<main class=" l-container clearfix">
+  <div class="l-content">
+    <section class="l-chapter-container mypage-identification">
+      <?php if($strStatus == 1): ?>
+      <h2 class="l-chapter-head">メッセージ送信完了</h2>
+      <form class="l-single-inner">
+      <div class="form-group">
+        <label>メッセージを送信しました。</label>
+        <p style="text-align: center; text-decoration: underline; color: #0098ec;"><a href="/message/">メッセージトップへ戻る</a></p>
+      </div>
+      </form>
+      <?php elseif($strStatus == 0): ?>
+      <h2 class="l-chapter-head">メッセージ保存完了</h2>
+      <form class="l-single-inner">
+        <div class="form-group">
+          <label>メッセージを下書きとして保存しました。</label>
+          <p style="text-align: center; text-decoration: underline; color: #0098ec;"><a href="/message/">メッセージトップへ戻る</a></p>
+        </div>
+      </form>
+      <?php endif; ?>
+
+
+    </section>
+  </div>
+
+  <?= $this->element('mypage_nav', ['strPage' => $strPage]) ?>
+</main>

@@ -1,0 +1,119 @@
+<?php
+$meta_title = Configure::read('html.cart');
+$meta_keywords = Configure::read('html.cart');
+$meta_description = Configure::read('html.cart');
+
+$this->set('title_for_layout',$meta_title);
+$this->Html->meta('keywords', $meta_keywords, array('inline' => false));
+$this->Html->meta('description', $meta_description, array('inline' => false));
+
+$referer = @$_SERVER["HTTP_REFERER"];
+if(empty($referer) || strpos($referer,'/cart') !== false){
+  $referer = '/item/category';
+}
+
+$code_area = <<< EOF
+    jQuery(document).ready(function() {
+        if ($('#paymentIdentity').val() != '') {
+            InitIdentity($('#paymentIdentity').val());
+            $('#paymentIdentity').val('');
+        }
+    });
+EOF;
+$this->assign('script_area', $code_area);
+?>
+
+<nav class="bread-crumbs">
+    <ul>
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+            <a href="/" itemprop="url">
+                <span itemprop="title">トップ</span>
+            </a>
+            <i class="icon-arrow-right"></i>
+        </li>
+
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+            <a href="/mypage" itemprop="url">
+                <span itemprop="title">マイページ</span>
+            </a>
+            <i class="icon-arrow-right"></i>
+        </li>
+
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+            <a href="/cart/buy_point" itemprop="url">
+                <span itemprop="title">ポイント購入</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+
+<main class=" l-container clearfix">
+    <div class="l-content">
+        <section class="l-chapter-container mypage-identification">
+            <h2 class="l-chapter-head">カート <?php echo $point_str; ?></h2>
+
+            <?php echo $this->Form->create('OrderPoint', array('id' => 'OrderPointForm', 'url' => '/cart/credit_card/', 'class' => 'l-single-inner', )); ?>
+
+            <?php echo $this->Form->input('mode', array('label' => false, 'type' => 'hidden', 'value' => 'payment', )) ?>
+            <?php echo $this->Form->input('paymentToken', array('id' => 'paymentToken', 'label' => false, 'type' => 'hidden', 'value' => '', )) ?>
+            <?php echo $this->Form->input('apiType', array('label' => false, 'type' => 'hidden', 'value' => $apiType, )) ?>
+
+            <div class="form-group">
+                <label>クレジットカード番号</label>
+                <input type="text" class="input-default" id="creditCardNumber" value="<?php echo $this->request->data('credit.card_no'); ?>" placeholder="例) 4980123412341234">
+            </div>
+
+            <div class="form-group">
+                <label>クレジットカード有効期限</label>
+                <br>
+                <div class="birthday-select-wrap">
+                    <div class="select-wrap">
+                        <i class="icon-arrow-bottom"></i>
+                        <select id="creditCardExpireYear" class="select-default">
+                            <option value="0">---</option>
+                            <?php for($i=date('Y'); $i<=date('Y')+20; $i++){ ?>
+                            <option value="<?php echo sprintf('%04d', $i); ?>" <?php echo ($this->request->data('credit.card_expire_y')==$i)? 'selected':''; ?>><?php echo sprintf('%04d', $i); ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <span>年</span>
+                    <div class="select-wrap select-wrap__month">
+                        <i class="icon-arrow-bottom"></i>
+                        <select id="creditCardExpireMonth" class="select-default">
+                            <option value="0">---</option>
+                            <?php for($i=1; $i<=12; $i++){ ?>
+                            <option value="<?php echo sprintf('%02d', $i); ?>" <?php echo ($this->request->data('credit.card_expire_m')==$i)? 'selected':''; ?>><?php echo sprintf('%02d', $i); ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <span>月</span>
+                </div>
+
+                <div class="clearfix">
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <label>セキュリティコード</label>
+                <input type="text" class="input-default" id="creditCardCVV2" value="<?php echo $this->request->data('credit.card_cvv'); ?>" placeholder="例) 123">
+            </div>
+
+            <div class="form-group">
+                <label>クレジットカード名義</label>
+                <input type="text" class="input-default" id="creditCardName" value="<?php echo $this->request->data('credit.card_name'); ?>" placeholder="例) TARO YAMADA">
+            </div>
+
+            <button type="button" class="btn-default btn-red" onclick="GetTokenAndRun()" style="margin-top: 24px">ポイントを購入する</button>
+
+            <?= $this->Form->end(); ?>
+        </section>
+    </div>
+
+    <?= $this->element('mypage_nav', ['strPage' => $strPage]) ?>
+</main>
+
+
+<input type='hidden' id='paymentIdentity' value='<?php echo $identity ?>'/>
+<?php echo $this->Html->script($includeJs, array('inline' => false)) ?>
+<?php echo $this->Html->script('credit-token.' . $paymentJs . '.js', array('inline' => false)) ?>

@@ -1,0 +1,13 @@
+vendors
+app/Vendor
+app/vendors
+app/plugins
+app/Plugin
+admin_app/Vendor
+admin_app/vendors
+admin_app/plugins
+admin_app/Plugin
+*.zip
+lib
+plugins
+app/tmp

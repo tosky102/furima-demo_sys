@@ -1,0 +1,59 @@
+<?php
+$meta_title = Configure::read('html.register');
+$meta_keywords = Configure::read('html.register');
+$meta_description = Configure::read('html.register');
+
+$this->set('title_for_layout',$meta_title);
+$this->Html->meta('keywords', $meta_keywords, array('inline' => false));
+$this->Html->meta('description', $meta_description, array('inline' => false));
+
+
+
+$script_area = <<< EOF
+$(function() {
+$( "#dialog" ).hide();
+$( "#no_agree" ).click(function(){
+$( "#dialog" ).dialog();
+});
+});
+EOF;
+$this->assign('script_area', $script_area);
+?>
+
+<section>
+  <h2 class="f25 mb40">新規会員登録</h2>
+  <?php
+  $msg = $this->Session->flash('auth');
+  if(!empty($msg)):
+  ?>
+  <div class="alert alert-danger alert-dismissible" role="alert">
+    <?php echo $msg; ?>
+  </div>
+  <?php else : ?>
+  <h3 class="ml30 mb20 mt20 nodecoration">会員利用規約</h3>
+  <div class="kiyaku">
+  <?=$HTML_PAGE_RULE?>
+</div>
+<?php echo $this->Form->create('MemberEntry',
+array('url' => '/member_regist',
+'class' => 'form-horizontal',
+'role'=>'form'
+)); ?>
+<?php echo $this->Form->input('agree',
+array('label' => false,
+'type' => 'hidden',
+'class'=>'form-control'
+)) ?>
+
+<div class="btn_area mt30 aligncenter width430p sp_width100 clearfix ml25-sp">
+  <p class="alignleft01 mr10 spmr_0"><input type="button" value="同意しない" class="mybtn-bl mybtn-bl-md mybtn-second" id="no_agree"></p>
+  <p class="alignleft01 mr10 spmr_0"><input type="submit" value="同意する" class="mybtn-bl mybtn-bl-md"></p>
+</div>
+
+<?php echo $this->Form->end(); ?>
+<?php endif; ?>
+</section>
+
+<div id="dialog" title="会員登録について">
+  <p>会員登録には会員利用規約の同意が必要です。</p>
+</div>

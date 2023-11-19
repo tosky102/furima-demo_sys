@@ -1,0 +1,47 @@
+<?php
+$meta_title = Configure::read('html.whatnew');
+$meta_keywords = Configure::read('html.whatnew');
+$meta_description = Configure::read('html.whatnew');
+
+$this->set('title_for_layout',$meta_title);
+$this->Html->meta('keywords', $meta_keywords, array('inline' => false));
+$this->Html->meta('description', $meta_description, array('inline' => false));
+
+$code_area = <<< EOF
+EOF;
+$this->assign('code_area', $code_area);
+?>
+
+
+<nav class="bread-crumbs ">
+    <ul>
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+            <a href="/" itemprop="url">
+                <span itemprop="title">トップ</span>
+            </a>
+            <i class="icon-arrow-right"></i>
+        </li>
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+            <span itemprop="title">お知らせ</span>
+        </li>
+    </ul>
+</nav>
+
+<section class="static-page">
+    <h2 id="privacy">運営からお知らせ</h2>
+    <div class="static-page-content">
+        <section>
+            <?php foreach($arrWhatNews as $row):?>
+<!--            <?php if($row['Whatsnews']['title']): ?>-->
+<!--            <p class="title"><?php echo h($row['Whatsnews']['title']) ?></p>-->
+<!--            <?else: ?>-->
+<!--            <p class="title">運営から</p>-->
+<!--            <?php endif; ?>-->
+            <p class="title">
+                <?php echo nl2br(h($row['Whatsnews']['comment'])) ?>
+            <p style="text-align: right; margin-right: 10px !important;"><?php echo h($row['Whatsnews']['comment_date']) ?></p>
+            </p>
+            <?php endforeach; ?>
+        </section>
+    </div>
+</section>

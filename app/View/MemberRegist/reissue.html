@@ -1,0 +1,52 @@
+<?php
+$meta_title = Configure::read('html.member');
+$meta_keywords = Configure::read('html.member');
+$meta_description = Configure::read('html.member');
+
+$this->set('title_for_layout',$meta_title);
+$this->Html->meta('keywords', $meta_keywords, array('inline' => false));
+$this->Html->meta('description', $meta_description, array('inline' => false));
+?>
+
+<div class="single-container">
+    <header class="single-header">
+        <h1>
+            <a href="/">
+                <img src="/yoshida/img/mallento_furimo_LP1.png">
+            </a>
+        </h1>
+    </header>
+
+    <main class="single-main">
+        <section class="l-single-container">
+            <h2 class="l-single-head">パスワードをお忘れの方</h2>
+            <?= $this->Form->create('Member', array('url' => '/member_regist/reissue','class' => 'l-single-inner', 'type' => 'post')) ?>
+
+                <div class="l-single-content">
+
+                    <div class="form-group">
+                        <label>メールアドレス</label>
+                        <?= $this->Form->input('email',array('label'=>false,'class'=>'input-default','placeholder' => 'ご登録されたメールアドレス')) ?>
+                    </div>
+
+                    <div class="form-group">
+                        <label>新規パスワード</label>
+                        <?= $this->Form->input('password',array('label'=>false,'class'=>'input-default','placeholder' => '新規パスワード')) ?>
+                    </div>
+
+                    <div class="form-group">
+                        <label>新規パスワード(確認)</label>
+                        <?= $this->Form->input('password_confirm',array('label'=>false,'class'=>'input-default','placeholder' => '新規パスワード(確認)')) ?>
+                    </div>
+
+                    <div class="form-group">
+                        <button class="btn-default btn-red" type="submit">送信する</button>
+                    </div>
+                </div>
+            </form>
+        </section>
+
+
+    </main>
+
+</div>

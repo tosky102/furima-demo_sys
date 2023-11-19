@@ -1,0 +1,37 @@
+<?php
+$meta_title = Configure::read('html.faq');
+$meta_keywords = Configure::read('html.faq');
+$meta_description = Configure::read('html.faq');
+
+$this->set('title_for_layout',$meta_title);
+$this->Html->meta('keywords', $meta_keywords, array('inline' => false));
+$this->Html->meta('description', $meta_description, array('inline' => false));
+
+$code_area = <<< EOF
+EOF;
+$this->assign('code_area', $code_area);
+?>
+
+
+<nav class="bread-crumbs ">
+  <ul>
+    <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+      <a href="/" itemprop="url">
+        <span itemprop="title">トップ</span>
+      </a>
+      <i class="icon-arrow-right"></i>
+    </li>
+    <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+      <span itemprop="title">よくある質問</span>
+    </li>
+  </ul>
+</nav>
+
+<section class="static-page">
+  <h2 id="privacy">よくある質問</h2>
+  <div class="static-page-content">
+    <section>
+      <?php echo $HTML_GUIDE_FAQ ?>
+    </section>
+  </div>
+</section>

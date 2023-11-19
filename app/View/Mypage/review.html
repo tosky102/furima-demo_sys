@@ -1,0 +1,66 @@
+<?php
+$meta_title = Configure::read('html.mypage');
+$meta_keywords = Configure::read('html.mypage');
+$meta_description = Configure::read('html.mypage');
+
+$this->set('title_for_layout',$meta_title);
+$this->Html->meta('keywords', $meta_keywords, array('inline' => false));
+$this->Html->meta('description', $meta_description, array('inline' => false));
+
+$this->Html->css('/css/main02.css', null, array('inline' => false));
+$this->Html->script('/js/page.js', array('inline' => false));
+$arrSelling = Configure::read('arrSelling');
+
+$code_area = <<< EOF
+EOF;
+$this->assign('code_area', $code_area);
+?>
+
+<nav class="bread-crumbs">
+  <ul>
+    <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+      <a href="/" itemprop="url">
+        <span itemprop="title">トップ</span>
+      </a>
+      <i class="icon-arrow-right"></i>
+    </li>
+
+    <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+      <a href="/mypage" itemprop="url">
+        <span itemprop="title">マイページ</span>
+      </a>
+      <i class="icon-arrow-right"></i>
+    </li>
+
+    <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+      <span itemprop="title">アイテムレビュー</span>
+    </li>
+  </ul>
+</nav>
+
+<main class=" l-container clearfix">
+  <div class="l-content">
+    <section class="l-chapter-container mypage-identification">
+      <h2 class="l-chapter-head">アイテムレビュー</h2>
+
+      <ul class="mypage-item-list">
+        <?php if(count($reviews) > 0): ?>
+        <?php foreach($reviews as $row): ?>
+        <li class="mypage-item-link">
+          <div class="mypage-item-body-left">
+            <div class="mypage-item-text"><?= h($row['Review']['comment']) ?></div>
+            <time><?= h(Configure::read('rating')[$row['Review']['rating']]) ?></time>
+          </div>
+
+        </li>
+        <?php endforeach; ?>
+        <?php else: ?>
+        <li class="mypage-item-not-found bold">該当する情報がありません。</li>
+        <?php endif; ?>
+      </ul>
+
+    </section>
+  </div>
+
+  <?= $this->element('mypage_nav', ['strPage' => $strPage]) ?>
+</main>

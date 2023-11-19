@@ -1,0 +1,29 @@
+<?php
+      $img_url = $this->Upload->uploadUrl($row,'Item.main_image',array('style'=>'list_s'));
+      $img_path = str_replace('//','/',WWW_ROOT.$img_url);
+      if(!file_exists($img_path) || !$img_path || substr_count($img_url, '.') > 1){
+        $img_url = "/img/front_s.png";
+      }
+      $item_url = "/item/detail/".$row['Item']['id'];
+      $title = mb_strimwidth($row['Item']['title'], 0, 40, "…");
+      $name_base = $row['Member']['company'].' '.$row['Member']['nickname'];
+      $name = mb_strimwidth($name_base, 0, 50, "…");
+      $price = number_format($row['Item']['price']);
+      $user_url = "/mypage/sellerinfo/".$row['Item']['member_id'];
+?>
+
+<li class="main__product__list__li">
+    <div class="main__product__list__li__div">
+        <a href="<?= $item_url ?>" class="main__product__list__link">
+            <figure class="common__card__01 res__width__01 common__font__family common__fluid__01">
+                <figcaption>
+                    <span><?= h($row['Item']['title']) ?></span>
+                </figcaption>
+                <div class="common__card__01__img">
+                    <span aria-label="Price">￥<?= $price ?></span>
+                    <img src="<?= $img_url ?>" alt="<?= h($row['Item']['title']) ?>">
+                </div>
+            </figure>
+        </a>
+    </div>
+</li>

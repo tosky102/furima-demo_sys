@@ -1,0 +1,331 @@
+<?php
+$meta_title = Configure::read('html.detail');
+$meta_keywords = Configure::read('html.detail');
+$meta_description = Configure::read('html.detail');
+
+$this->set('title_for_layout',$meta_title);
+$this->Html->meta('keywords', $meta_keywords, array('inline' => false));
+$this->Html->meta('description', $meta_description, array('inline' => false));
+
+$this->Html->script('/js/follower.js', array('inline' => false));
+$this->Html->script('/js/page.js', array('inline' => false));
+
+if(isset($this->params->query['favres']) && $this->params->query['favres'] == 'favorite_success'){
+echo '<script>alert("お気に入りに登録しました");</script>';
+}
+
+$code_area = <<< EOF
+EOF;
+$this->assign('code_area', $code_area);
+$arrItem = $arrData['Item'];
+$arrMember = $arrData['Member'];
+$main_img = $this->Upload->uploadUrl($arrItem,'Item.main_image',array('style'=>'list_l'));
+
+$sub_img1 = $this->Upload->uploadUrl($arrItem,'Item.sub_image1',array('style'=>'list_l'));
+$sub_img2 = $this->Upload->uploadUrl($arrItem,'Item.sub_image2',array('style'=>'list_l'));
+$sub_img3 = $this->Upload->uploadUrl($arrItem,'Item.sub_image3',array('style'=>'list_l'));
+$sub_img4 = $this->Upload->uploadUrl($arrItem,'Item.sub_image4',array('style'=>'list_l'));
+
+?>
+
+<section class="item-box-container l-single-container">
+  <h1 class="item-name"><?= h($arrItem['title']) ?></h1>
+  <div class="item-main-content clearfix">
+    <div class="item-photo">
+      <div class="owl-carousel">
+        <div class="owl-item-inner" data-dot="<div class='owl-dot-inner'><img src='<?= $main_img ?>'></div>"><img data-src="<?= $main_img ?>" alt="<?= h($arrItem['title']) ?>" class="owl-lazy" src="<?= $main_img ?>" style="opacity: 1;"></div>
+
+        <?php for($img_ind = 1; $img_ind < 5; $img_ind++): ?>
+        <?php if(!empty($arrItem['sub_image' . $img_ind . '_file_name'])): ?>
+        <?php $var = 'sub_img' . $img_ind; ?>
+        <div class="owl-item-inner" data-dot="<div class='owl-dot-inner'><img src='<?= $$var ?>'></div>"><img data-src="<?= $$var ?>" alt="<?= h($arrItem['title']) ?>" class="owl-lazy" src="<?= $$var ?>" style="opacity: 1;"></div>
+        <?php endif; ?>
+        <?php endfor; ?>
+
+      </div>
+    </div>
+
+    <div class="visible-sp">
+      <div class="item-price-box text-center">
+        <span class="item-price bold">¥<?= number_format($arrItem['price']) ?></span>
+        <span class="item-tax"> (税込)</span>
+      </div>
+
+      <?php if($arrItem['selling'] == 1): ?>
+
+      <?php if($arrItem['quantity'] > 0): ?>
+      <a class="item-buy-btn xb-btn" href="/cart/addItem/?item_id=<?= $arrItem['id'] ?>&quantity=1">
+        カートに入れる
+        <svg style="display: none" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" class="mericon mericon-icon-blank"><g fill-rule="evenodd"><path d="M8.788 12h-6.39A2.399 2.399 0 0 1 0 9.603V3.212A2.398 2.398 0 0 1 2.397.815h3.435a.798.798 0 1 1 0 1.598H2.397a.8.8 0 0 0-.8.799v6.391c0 .441.36.8.8.8h6.391a.8.8 0 0 0 .8-.8V6.168a.798.798 0 1 1 1.597 0v3.435A2.4 2.4 0 0 1 8.788 12"></path><path d="M5.609 7.19a.797.797 0 0 1-.565-1.364l5.592-5.59a.797.797 0 0 1 1.13 0 .797.797 0 0 1 0 1.13L6.172 6.955a.797.797 0 0 1-.564.235"></path><path d="M11.2 4.165a.798.798 0 0 1-.798-.8V1.599H8.634a.798.798 0 1 1 0-1.598h2.567c.442 0 .799.357.799.8v2.566a.798.798 0 0 1-.8.799"></path></g></svg>
+      </a>
+      <?php else: ?>
+      <a class="item-buy-btn xb-btn" disabled>
+        売切
+      </a>
+      <?php endif; ?>
+
+      <?php if($favorited): ?>
+      <a class="item-buy-btn btn-favorite" disabled="disabled">
+        お気に入り追加済み
+      </a>
+      <?php else: ?>
+      <a class="item-buy-btn btn-favorite" href="/item/favorite/<?= $arrItem['id'] ?>">
+        お気に入り
+      </a>
+      <?php endif; ?>
+      <?php elseif($arrItem['selling'] == 0): ?>
+      <a class="item-buy-btn xb-btn" disabled>販売停止中</a>
+      <?php else: ?>
+      <a class="item-buy-btn xb-btn" disabled>販売終了</a>
+      <?php endif; ?>
+
+    </div>
+    <table class="item-detail-table">
+      <tbody>
+      <tr>
+        <th>商品番号</th>
+        <td><?= sprintf('%06d', $arrItem['id']) ?></td>
+      </tr>
+      <tr>
+        <th>登録日</th>
+        <td><?= date('Y年m月d日',strtotime($arrItem['created'])) ?></td>
+      </tr>
+
+      </tbody>
+    </table>
+
+    <div class="item-detail-seller">
+      <h4>出品者</h4>
+      <a href="/mypage/sellerinfo/<?= h($arrMember['id']) ?>" class="clearfix">
+        <?php if(!empty($arrData['Member']['image_file_name'])): ?>
+        <?php echo $this->Upload->uploadImage($arrData['Member'],'Member.image',array('style'=>'thumb')); ?>
+        <?php else: ?>
+        <?php echo '<img src="/img/front_s.png" alt="画像">'; ?>
+        <?php endif; ?>
+      </a>
+
+      <a href="/mypage/sellerinfo/<?= h($arrMember['id']) ?>">
+        <p><?= h($arrMember['company']) ?> <?= h($arrMember['nickname']) ?></p>
+      </a>
+
+      <?php if(!empty($loginname)): ?>
+      <p><a href="javascript:void(0)" onclick="add_follow('<?= $arrItem['member_id'] ?>');return false;">＞販売者をフォローする</a></p>
+      <?php else: ?>
+      <p><a href="javascript:void(0)" onclick="alert('ログインしなければフォローできません。')">＞販売者をフォローする</a></p>
+      <?php endif; ?>
+      <p><a href="/message/new_message/<?= $arrItem['member_id'] ?>/<?= $arrItem['id'] ?>">＞販売者にこの商品についてメッセージを送る</a></p>
+      <p><a href="/message/concern/<?= $arrItem['member_id'] ?>/<?= $arrItem['id'] ?>" class="concern">＞この商品について「気になる」を出品者に通知</a></p>
+      <p><a href="javascript:void window.open('http://twitter.com/intent/tweet?text=<?= h($arrItem['title']) ?>&url=<?= (empty($_SERVER["HTTPS"]) ? "http://" : "https://") . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];?>','_blank','width=550,height=480,left=100,top=50,scrollbars=1,resizable=1',0);">＞Twitterでこの商品を紹介する</a></p>
+      <p><a href="mailto:info@<?=Configure::read('info.domain')?>?subject=商品の通報&body=商品番号:<?= sprintf('%06d', $arrItem['id']) ?>%0d%0a<?= (empty($_SERVER["HTTPS"]) ? "http://" : "https://") . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];?>">＞この商品を通報する</a></p>
+
+    </div>
+  </div>
+
+  <div class="visible-pc">
+    <div class="item-price-box text-center">
+      <span class="item-price bold">¥<?= number_format($arrItem['price']) ?></span>
+      <span class="item-tax"> (税込)</span>
+    </div>
+
+    <?php if($arrItem['selling'] == 1): ?>
+
+    <?php if($arrItem['quantity'] > 0): ?>
+    <a class="item-buy-btn xb-btn" href="/cart/addItem/?item_id=<?= $arrItem['id'] ?>&quantity=1">
+      カートに入れる
+      <svg style="display: none" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" class="mericon mericon-icon-blank"><g fill-rule="evenodd"><path d="M8.788 12h-6.39A2.399 2.399 0 0 1 0 9.603V3.212A2.398 2.398 0 0 1 2.397.815h3.435a.798.798 0 1 1 0 1.598H2.397a.8.8 0 0 0-.8.799v6.391c0 .441.36.8.8.8h6.391a.8.8 0 0 0 .8-.8V6.168a.798.798 0 1 1 1.597 0v3.435A2.4 2.4 0 0 1 8.788 12"></path><path d="M5.609 7.19a.797.797 0 0 1-.565-1.364l5.592-5.59a.797.797 0 0 1 1.13 0 .797.797 0 0 1 0 1.13L6.172 6.955a.797.797 0 0 1-.564.235"></path><path d="M11.2 4.165a.798.798 0 0 1-.798-.8V1.599H8.634a.798.798 0 1 1 0-1.598h2.567c.442 0 .799.357.799.8v2.566a.798.798 0 0 1-.8.799"></path></g></svg>
+    </a>
+    <?php else: ?>
+    <a class="item-buy-btn xb-btn" disabled>
+      売切
+    </a>
+    <?php endif; ?>
+
+    <?php if($favorited): ?>
+    <a class="item-buy-btn btn-favorite" disabled="disabled">
+      お気に入り追加済み
+    </a>
+    <?php else: ?>
+    <a class="item-buy-btn btn-favorite" href="/item/favorite/<?= $arrItem['id'] ?>">
+      お気に入り
+    </a>
+    <?php endif; ?>
+    <?php elseif($arrItem['selling'] == 0): ?>
+    <a class="item-buy-btn xb-btn" disabled>販売停止中</a>
+    <?php else: ?>
+    <a class="item-buy-btn xb-btn" disabled>販売終了</a>
+    <?php endif; ?>
+  </div>
+  <div class="item-description f14">
+    <p class="item-description-inner"><?= nl2br(h($arrItem['discription'])) ?></p>
+  </div>
+
+  <div class="item-button-container clearfix">
+    <div class="item-button-left">
+      <br>
+      <?php if(!empty($arrItem['tag1']) || !empty($arrItem['tag2']) || !empty($arrItem['tag3']) || !empty($arrItem['tag4']) || !empty($arrItem['tag5'])): ?>
+      <span style="font-size: 18px; margin-top: 12px; margin-bottom: 12px; font-weight: 500">キーワード:</span>
+      <?php if(!empty($arrItem['tag1'])): ?>
+      <span><a href="/item/tag/<?= h($arrItem['tag1']) ?>"><?= h($arrItem['tag1']) ?></a></span>
+      <?php endif; ?>
+      <?php if(!empty($arrItem['tag2'])): ?>
+      <span><a href="/item/tag/<?= h($arrItem['tag2']) ?>"><?= h($arrItem['tag2']) ?></a></span>
+      <?php endif; ?>
+      <?php if(!empty($arrItem['tag3'])): ?>
+      <span><a href="/item/tag/<?= h($arrItem['tag3']) ?>"><?= h($arrItem['tag3']) ?></a></span>
+      <?php endif; ?>
+      <?php if(!empty($arrItem['tag4'])): ?>
+      <span><a href="/item/tag/<?= h($arrItem['tag4']) ?>"><?= h($arrItem['tag4']) ?></a></span>
+      <?php endif; ?>
+      <?php if(!empty($arrItem['tag5'])): ?>
+      <span><a href="/item/tag/<?= h($arrItem['tag5']) ?>"><?= h($arrItem['tag5']) ?></a></span>
+      <?php endif; ?>
+      <?php endif; ?>
+    </div>
+  </div>
+</section>
+
+
+<div class="item-detail-message">
+  <div class="message-container">
+    <?php if(!empty($arrReview)): ?>
+    <div class="message-content">
+      <ul class="message-items">
+        <?php foreach($arrReview as $row): ?>
+
+        <?php
+        $img_url = $this->Image->upload_resize('members', $row['Member']['id'], $row['Member']['image_file_name'], 'list_s');
+        $img_path = str_replace(WWW_ROOT,'/',$img_url);
+        if(!file_exists($img_url) || !$img_path || substr_count($img_path, '.') > 1){
+        $img_path = "/img/front_s.png";
+        }
+        $img_url = $img_path;
+        $user_url = "/mypage/sellerinfo/" . $row['Member']['id'];
+        $time = date('Y-m-d H:i:s', strtotime($row['Review']['created']));
+        ?>
+        <li class="clearfix">
+          <a class="message-user" href="<?= $user_url ?>">
+            <figure>
+              <div>
+                <img src="<?= $img_url ?>" alt="">
+              </div>
+              <figcaption class="bold">
+                <?= h($row['Member']['name']) ?>
+              </figcaption>
+            </figure>
+          </a>
+
+          <div class="message-body">
+            <div class="message-body-text">
+              <div class="message-body-text-left"><?= h($row['Review']['comment']) ?></div>
+              <div style="float: right; font-weight: bold"><?= h(Configure::read('rating')[$row['Review']['rating']]) ?></div>
+            </div>
+            <div class="message-icons clearfix">
+              <time class="message-icon-left">
+                <i class="icon-time"></i>
+                <span><?= $time ?></span>
+              </time>
+            </div>
+            <i class="icon-balloon"></i>
+          </div>
+        </li>
+        <?php endforeach; ?>
+      </ul>
+    </div>
+    <?php endif; ?>
+
+    <?php if ($canWriteReview) : ?>
+    <div class="message-content">
+
+      <?= $this->Form->create('Review', array('url' => '/item/detail/'.$arrItem['id'], 'class' => 'message-form', 'role'=>'form' )); ?>
+      <?= $this->Form->input('item_id', array('label' => false, 'type' => 'hidden', 'value' => $arrItem['id'], )) ?>
+
+      <?= $this->Form->input('comment', array('label' => false, 'div' => false, 'type' => 'text', 'rows' => 2, 'class' => 'textarea-default',));?>
+      <div class="form-group" style="margin-top: 20px; margin-bottom: 20px">
+        <label>評価</label>
+        <div class="select-wrap">
+          <i class="icon-arrow-bottom"></i>
+          <select name="data[Review][rating]" class="select-default">
+            <option value="1">悪い</option>
+            <option value="2">やや悪い</option>
+            <option value="3">普通</option>
+            <option value="4">良い</option>
+            <option value="5">大変良い</option>
+          </select>
+        </div>
+      </div>
+      <?php if(!empty($loginname)): ?>
+      <button type="submit" class="message-submit btn-default btn-gray">
+        <span>レビューを投稿</span>
+      </button>
+      <?php else: ?>
+      <a href="/mypage/" class="message-submit btn-default btn-gray">
+        <span>レビュー投稿するにはログインしてください</span>
+      </a>
+      <?php endif; ?>
+      <?= $this->Form->end(); ?>
+    </div>
+    <?php endif; ?>
+  </div>
+</div>
+
+<div class="items-in-user-profile">
+  <section class="items-box-container clearfix related-item-column items-in-user-profile">
+    <h2 class="items-box-head">
+      この商品を買った人はこんな商品も買っています
+    </h2>
+    <div class="items-box-content clearfix">
+      <?php foreach($arrLikeData as $row): ?>
+      <?= $this->element('item_02', ['row' => $row]) ?>
+      <?php endforeach; ?>
+    </div>
+  </section>
+
+  <section class="items-box-container clearfix related-item-column">
+    <h2 class="items-box-head">
+      この出品者の人気商品
+    </h2>
+    <div class="items-box-content clearfix">
+      <?php foreach($arrSaleRanking as $row): ?>
+      <?= $this->element('item_02', ['row' => $row]) ?>
+      <?php endforeach; ?>
+    </div>
+  </section>
+
+  <section class="items-box-container clearfix related-item-column">
+    <h2 class="items-box-head">
+      商品ランキング
+    </h2>
+    <div class="items-box-content clearfix">
+      <?php foreach($arrSaleRank as $row): ?>
+      <?= $this->element('item_02', ['row' => $row]) ?>
+      <?php endforeach; ?>
+    </div>
+  </section>
+
+  <section class="items-box-container clearfix related-item-column">
+    <h2 class="items-box-head">
+      最近閲覧した商品
+    </h2>
+    <div class="items-box-content clearfix">
+      <?php foreach($arrBrowse as $row): ?>
+      <?= $this->element('item_02', ['row' => $row]) ?>
+      <?php endforeach; ?>
+    </div>
+  </section>
+</div>
+
+<script src="/yoshida/js/vendor/owl/owl.carousel.min.js"></script>
+
+<script>
+  var owl;
+  owl = $(".owl-carousel").owlCarousel({
+    items: 1,
+    dots: true,
+    dotsData: true
+  });
+
+  $('.owl-dot').hover(function () {
+    owl.trigger('to.owl.carousel', [$(this).index(), 300]);
+  });
+
+</script>

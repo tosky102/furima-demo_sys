@@ -1,0 +1,277 @@
+<?php
+/**
+*
+*
+* CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
+* Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+*
+* Licensed under The MIT License
+* For full copyright and license information, please see the LICENSE.txt
+* Redistributions of files must retain the above copyright notice.
+*
+* @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+* @link          http://cakephp.org CakePHP(tm) Project
+* @package       app.View.Layouts
+* @since         CakePHP(tm) v 0.10.0.1076
+* @license       http://www.opensource.org/licenses/mit-license.php MIT License
+*/
+$dspCategories = array_slice(Configure::read('arrCategory'), 0, 10);
+
+$shadow_pc_class = '' ;
+$shadow_sp_class = '';
+if(isset($isShadow) && $isShadow) {
+    $shadow_pc_class = 'header__shadow';
+    $shadow_sp_class = 'sp__header__shadow';
+
+}
+
+?>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <!--[if lt IE 9]><meta http-equiv="X-UA-Compatible" content="IE=edge"></script><![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><?php echo $title_for_layout; ?></title>
+    <?php echo $this->fetch('meta'); ?>
+    <meta name="keywords" content="Mallento">
+    <meta name="description" content="Mallento">
+    <!-- css -->
+    <link href="/yoshida/css/common.css" rel="stylesheet">
+    <link href="/yoshida/css/sp_common.css" rel="stylesheet">
+    <link href="/yoshida/css/header.css" rel="stylesheet">
+
+    <?php echo $this->fetch('css'); ?>
+    <?php echo $this->element('googl_tracking');?>
+
+    <script type="text/javascript" src="/yoshida/js/jquery-3.4.1.js"></script>
+
+    <script>
+        function onImgErr(elm) {
+            elm.src = "/img/front.png";
+        }
+    </script>
+    <script type="text/javascript" id="useragent-switcher">
+        navigator.__defineGetter__("userAgent", function() {return "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/604.3.5 (KHTML, like Gecko) Version/11.0.1 Safari/604.3.5"})
+    </script>
+</head>
+
+<body>
+
+<div class="default-container">
+    <header class="sp-header visible-sp with-shadow">
+        <div class="sp-header-inner">
+            <div class="logo">
+                <a href="/">
+                    <img src="/yoshida/img/mallento_furimo_LP1.png" style="width: 100%">
+                </a>
+            </div>
+            <div class="sp__header__buttons">
+                <?php if(!empty($loginname)): ?>
+                <a href="/mypage" class="sp__header__button__signup">マイページ</a>
+                <a href="/mypage/logout" class="sp__header__button__signin">ログアウト</a>
+                <?php else: ?>
+                <a href="/member_regist" class="sp__header__button__signup">新規会員</a>
+                <a href="/mypage" class="sp__header__button__signin">ログイン</a>
+                <?php endif; ?>
+            </div>
+
+        </div>
+        <div class="search-bar">
+            <form action="/item/search/" class="sp-header-form">
+                <?php if(isset($keyword)): ?>
+                <input type="search" name="keyword" value="<?= $keyword ?>" placeholder="何をお探しですか？" class="sp-header-search input-default">
+                <?php else: ?>
+                <input type="search" name="keyword" value="" placeholder="何をお探しですか？" class="sp-header-search input-default">
+                <?php endif; ?>
+                <i class="icon-search"></i>
+            </form>
+        </div>
+
+    </header>
+    <header class="pc-header visible-pc">
+        <div class="pc-header-inner">
+            <div class="pc-header-top">
+                <div>
+                    <a href="/">
+                        <img src="/yoshida/img/mallento_furimo_LP1.png" width="134" height="36">
+                    </a>
+                </div>
+
+                <form action="/item/search" class="pc-header-form">
+                    <?php if(isset($keyword)): ?>
+                    <input type="search" name="keyword" value="<?= $keyword ?>" placeholder="何かお探しですか？" class="input-default">
+                    <?php else: ?>
+                    <input type="search" name="keyword" value="" placeholder="何かお探しですか？" class="input-default">
+                    <?php endif; ?>
+                    <i class="icon-search"></i>
+                </form>
+            </div>
+
+            <div class="pc-header-nav-box clearfix">
+
+                <nav class="l-left">
+                    <ul class="pc-header-nav">
+                        <li>
+                            <h2>
+                                <a href="/item/category/" class="pc-header-nav-root list-parent">
+                                    <i class="icon-list pc-header-cat-brand-icon"></i> <span>カテゴリーから探す</span>
+                                </a>
+                            </h2>
+                            <ul class="pc-header-nav-parent-wrap" style="width: auto;">
+                                <?php foreach($arrCategory as $key=>$categories): ?>
+                                <li class="pc-header-nav-parent">
+                                    <h3>
+                                        <a href="/item/category/<?= $key?>" class=""><?= $key ?></a>
+                                    </h3>
+
+                                    <ul class="pc-header-nav-child-wrap">
+                                        <li class="pc-header-nav-child">
+                                            <a href="/item/category/<?= $key?>">　全て</a>
+                                        </li>
+                                        <?php foreach($categories as $key1=>$val1): ?>
+                                        <?php if($key <> $key1): ?>
+                                        <li class="pc-header-nav-child">
+                                            <a href="/item/category/<?= $key1?>"><?= $val1 ?></a>
+                                        </li>
+                                        <?php endif; ?>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <h2>
+                                <a href="/item/tag/" class="pc-header-nav-root list-parent">
+                                    <i class="icon-tag pc-header-cat-brand-icon"></i> <span>キーワードから探す</span>
+                                </a>
+                                <ul class="pc-header-nav-parent-wrap">
+                                    <?php foreach($arrTagList as $tag): ?>
+                                    <li class="pc-header-nav-parent">
+                                        <h3>
+                                            <a href="/item/tag/<?= $tag ?>"><?= $tag ?></a>
+                                        </h3>
+                                    </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </h2>
+                        </li>
+                    </ul>
+                </nav>
+
+
+                <li class="l-right">
+
+                    <ul class="pc-header-user-nav">
+
+                        <?php if(!empty($loginname)): ?>
+                        <li class="header__button__signup">
+                            <a href="/mypage">マイページ</a>
+                        </li>
+                        <li class="header__button__signin">
+                            <a href="/mypage/logout">ログアウト</a>
+                        </li>
+                        <?php else: ?>
+                        <li class="header__button__signup">
+                            <a href="/member_regist">新規会員</a>
+                        </li>
+                        <li class="header__button__signin">
+                            <a href="/mypage">ログイン</a>
+                        </li>
+                        <?php endif; ?>
+
+                    </ul>
+                </div>
+        </div>
+    </header>
+
+    <?php echo $this->fetch('content'); ?>
+
+    <div class="upload__product">
+        <a href="/mypage/item">
+            <div class="upload__product__part">
+                <div class="upload__product__text">出品</div>
+                <svg aria-hidden="true" width="18" height="16" viewBox="0 0 18 16" class="sc-kGXeez sc-fBuWsC bMYJEZ"><path fill="currentColor" fill-rule="nonzero" d="M6.3 0L4.653 1.778H1.8c-.99 0-1.8.8-1.8 1.778v10.666C0 15.2.81 16 1.8 16h14.4c.99 0 1.8-.8 1.8-1.778V3.556c0-.978-.81-1.778-1.8-1.778h-2.853L11.7 0H6.3zM9 13.333c-2.484 0-4.5-1.99-4.5-4.444 0-2.453 2.016-4.445 4.5-4.445s4.5 1.992 4.5 4.445c0 2.453-2.016 4.444-4.5 4.444zm0-1.6c1.59 0 2.88-1.273 2.88-2.844S10.59 6.044 9 6.044c-1.59 0-2.88 1.274-2.88 2.845 0 1.57 1.29 2.844 2.88 2.844z"></path></svg>
+            </div>
+        </a>
+    </div>
+
+    <footer class="global-footer">
+        <nav class="clearfix">
+            <div class="footer-cell">
+                <h2 class="footer-head">PerfomersMarketについて</h2>
+                <ul>
+                    <li>
+                        <a href="/aboutus">会社概要（運営会社）</a>
+                    </li>
+                    <li>
+                        <a href="/aboutus/contact">お問い合わせ</a>
+                    </li>
+                    <li>
+                        <a href="/aboutus/faq">よくある質問</a>
+                    </li>
+
+                </ul>
+            </div>
+            <div class="footer-cell">
+                <h2 class="footer-head">ヘルプ＆ガイド</h2>
+                <ul>
+                    <li>
+                        <a href="/aboutus/guide/buy">購入者ガイド</a>
+                    </li>
+                    <li>
+                        <a href="/aboutus/guide/sale">出品者ガイド</a>
+                    </li>
+
+                </ul>
+            </div>
+            <div class="footer-cell full-width">
+                <h2 class="footer-head">プライバシーと利用規約</h2>
+                <div class="inner-footer-cell">
+                    <ul>
+                        <li>
+                            <a href="/aboutus/privacy">プライバシーポリシー</a>
+                        </li>
+                        <li>
+                            <a href="/aboutus/whatnew">運営からお知らせ</a>
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="inner-footer-cell">
+                    <ul>
+                        <li>
+                            <a href="/aboutus/law">特定商取引に関する表記</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="footer-bottom">
+            <a href="/" class="footer-logo">
+                <img src="/yoshida/img/mallento_furimo_logo.png" style="width: 180px">
+            </a>
+            <span class="footer-copyright">
+      <small>© Perfomersmarket, Inc.</small>
+    </span>
+        </div>
+    </footer>
+</div>
+
+
+<?php echo $this->fetch('script'); ?>
+<script type="text/javascript">
+    <?php echo $this->fetch('script_area'); ?>
+</script>
+<script type="text/javascript">
+    jQuery(document).ready(function($){
+        $('.auto_linker').each(function(){
+            $(this).html( $(this).html().replace(/((http|https|ftp):\/\/[\w?=&.\/-;#~%-]+(?![\w\s?&.\/;#~%"=-]*>))/g, '<a href="$1" target="_blank">$1</a> ') );
+        });
+    });
+</script>
+</body>
+</html>

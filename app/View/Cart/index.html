@@ -1,0 +1,115 @@
+<?php
+$meta_title = Configure::read('html.cart');
+$meta_keywords = Configure::read('html.cart');
+$meta_description = Configure::read('html.cart');
+
+$this->set('title_for_layout',$meta_title);
+$this->Html->meta('keywords', $meta_keywords, array('inline' => false));
+$this->Html->meta('description', $meta_description, array('inline' => false));
+
+$referer = @$_SERVER["HTTP_REFERER"];
+if(empty($referer) || strpos($referer,'/cart') !== false){
+$referer = '/item/category';
+}
+
+$code_area = <<< EOF
+EOF;
+$this->assign('script_area', $code_area);
+?>
+
+<div class="single-container">
+  <header class="single-header">
+    <h1>
+      <a href="/">
+        <img src="/yoshida/img/mallento_furimo_LP1.png">
+      </a>
+    </h1>
+  </header>
+
+  <main class="single-main">
+    <section class="l-single-container buy-item-container">
+      <h2 class="l-single-head buy-head">購入内容の確認</h2>
+
+      <?php if(!empty($arrCart['list'])): ?>
+      <?php foreach($arrCart['list'] as $row): ?>
+
+      <?php
+        $r['Item']['main_image_file_name'] = $row['imgurl'];
+        $r['Item']['id'] = $row['item_id'];
+        $img_url = $this->Upload->uploadUrl($r,'Item.main_image',array('style'=>'list_l'));
+
+        $img_path = str_replace(WWW_ROOT,'/',$img_url);
+        if(!$img_path || substr_count($img_url, '.') > 1){
+        $img_url = "/img/front_s.png";
+        }
+      ?>
+      <section class="buy-content buy-item">
+        <div class="buy-content-inner">
+          <div class="buy-item-box">
+            <h3 class="buy-item-image">
+              <img data-src="<?= $img_url ?>" class=" lazyloaded" alt="" src="<?= $img_url ?>">
+            </h3>
+            <div class="buy-item-detail">
+              <p class="buy-item-name"><?= $row['item_name'] ?></p>
+
+              <p class="buy-price-ja bold">
+                <span>¥<?= number_format($row['price'])?></span>
+                <span class="item-shipping-fee">（税込）</span>
+              </p>
+              <p class="buy-item-del bold">
+                <a href="/cart/delItem/<?php echo $row['item_id'] ?>">削除</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <?php endforeach; ?>
+      <?php endif; ?>
+
+      <section class="buy-content buy-item">
+        <div class="buy-content-inner">
+          <form class="buy-form" novalidate="novalidate">
+
+            <ul class="buy-price-table">
+              <li class="buy-price-row buy-you-pay bold">
+                <div class="buy-price-cell buy-price-cell-label">支払い金額</div>
+                <div class="buy-price-cell">
+                  <span data-buy-pay="1400">¥<?= number_format($arrCart['sumTotal']) ?></span>
+                </div>
+              </li>
+            </ul>
+
+            <?php if(!empty($arrCart['list'])): ?>
+
+              <?php if(!empty($loginname)): ?>
+              <section class="buy-content">
+                <a href="/cart/clearance" class="btn-default btn-red bold">ポイント決済する</a>
+                <a href="/cart/buy_point" class="btn-default btn-gray bold" style="margin-top: 24px">ポイント購入する</a>
+              </section>
+              <?php else: ?>
+                <a href="/cart/login/clearance" class="btn-default btn-red bold">ポイント決済する</a>
+                <a href="/cart/login/buy_point" class="btn-default btn-gray bold" style="margin-top: 24px">ポイント購入する</a>
+              <?php endif; ?>
+
+            <?php else: ?>
+              <?php if(!empty($loginname)): ?>
+              <section class="buy-content">
+                <a href="javascript:alert('決済する商品がありません。');" class="btn-default btn-red bold">ポイント決済する</a>
+                <a href="/cart/buy_point" class="btn-default btn-gray bold" style="margin-top: 24px">ポイント購入する</a>
+              </section>
+              <?php else: ?>
+                <a href="javascript:alert('決済する商品がありません。');" class="btn-default btn-red bold">ポイント決済する</a>
+                <a href="/cart/login/buy_point" class="btn-default btn-gray bold" style="margin-top: 24px">ポイント購入する</a>
+              <?php endif; ?>
+            <?php endif; ?>
+
+          </form>
+        </div>
+        <section>
+        </section>
+      </section>
+    </section>
+  </main>
+
+</div>

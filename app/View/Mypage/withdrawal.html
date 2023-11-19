@@ -1,0 +1,63 @@
+<?php
+$meta_title = Configure::read('html.withdrawal');
+$meta_keywords = Configure::read('html.withdrawal');
+$meta_description = Configure::read('html.withdrawal');
+
+$this->set('title_for_layout',$meta_title);
+$this->Html->meta('keywords', $meta_keywords, array('inline' => false));
+$this->Html->meta('description', $meta_description, array('inline' => false));
+
+$this->Html->css('/css/main02.css', null, array('inline' => false));
+$this->Html->script('/js/page.js', array('inline' => false));
+
+$code_area = <<< EOF
+EOF;
+$this->assign('code_area', $code_area);
+?>
+
+<nav class="bread-crumbs">
+  <ul>
+    <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+      <a href="/" itemprop="url">
+        <span itemprop="title">トップ</span>
+      </a>
+      <i class="icon-arrow-right"></i>
+    </li>
+
+    <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+      <a href="/mypage" itemprop="url">
+        <span itemprop="title">マイページ</span>
+      </a>
+      <i class="icon-arrow-right"></i>
+    </li>
+
+    <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+      <a href="/mypage/withdrawal" itemprop="url">
+        <span itemprop="title">退会</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<main class=" l-container clearfix">
+  <div class="l-content">
+
+    <section class="l-chapter-container mypage-identification">
+      <h2 class="l-chapter-head">退会する</h2>
+      <form class="l-single-inner">
+        <div class="form-group">
+          <p>会員を退会された場合には、現在保存されている購入履歴や、お届け先などの情報は、全て削除されますがよろしいでしょうか？</p>
+          <p>退会手続きが完了した時点で、現在保存されている購入履歴や、お届け先等の情報は全てなくなりますのでご注意ください。</p>
+        </div>
+
+        <button type="button" href="javascript:void(0);" id="btnWithdrawal" class="btn-default btn-red" style="margin-top: 24px">退会手続きへ</button>
+      </form>
+    </section>
+
+
+  </div>
+
+  <?= $this->element('mypage_nav', ['strPage' => $strPage]) ?>
+</main>
+
+

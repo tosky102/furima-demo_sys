@@ -1,0 +1,32 @@
+<?php
+$this->set('title_for_layout',$META_TITLE);
+$this->Html->meta('keywords', $META_KEYWORDS, array('inline' => false));
+$this->Html->meta('description', $META_DESCRIPTION, array('inline' => false));
+
+$code_area = <<< EOF
+EOF;
+$this->assign('code_area', $code_area);
+?>
+
+<nav class="bread-crumbs ">
+    <ul>
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+            <a href="/" itemprop="url">
+                <span itemprop="title">トップ</span>
+            </a>
+            <i class="icon-arrow-right"></i>
+        </li>
+        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+            <span itemprop="title"><?=$PAGE_TITLE?></span>
+        </li>
+    </ul>
+</nav>
+
+<section class="static-page">
+    <h2 id="privacy"><?=$PAGE_TITLE?></h2>
+    <div class="static-page-content">
+        <section>
+            <?php echo $HTML_GUIDE_CONTENT ?>
+        </section>
+    </div>
+</section>

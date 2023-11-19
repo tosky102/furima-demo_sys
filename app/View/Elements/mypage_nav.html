@@ -1,0 +1,123 @@
+<div class="l-side">
+    <nav class="mypage-nav">
+        <h3 class="mypage-nav-head" style="margin-top: 0">販売者用</h3>
+        <ul class="mypage-nav-list">
+            <li>
+                <a href="/mypage/" class="mypage-nav-list-item <?= (!isset($strPage) || $strPage=='mypage' ? 'active' : '')?>">
+                    マイページ
+                    <i class="icon-arrow-right"></i>
+                </a>
+            </li>
+            <li>
+                <a href="/mypage/item" class="mypage-nav-list-item <?= (isset($strPage) && $strPage=='item' ? 'active' : '')?>">
+                    出品する
+                    <i class="icon-arrow-right"></i>
+                </a>
+            </li>
+            <li>
+                <a href="/mypage/item_list" class="mypage-nav-list-item <?= (isset($strPage) && $strPage=='item_list' ? 'active' : '')?>">
+                    商品リスト
+                    <i class="icon-arrow-right"></i>
+                </a>
+            </li>
+            <li>
+                <a href="/mypage/process_order" class="mypage-nav-list-item <?= (isset($strPage) && $strPage=='process_order' ? 'active' : '')?>">
+                    注文を処理
+                    <i class="icon-arrow-right"></i>
+                </a>
+            </li>
+            <li>
+                <a href="/mypage/sales_report" class="mypage-nav-list-item <?= (isset($strPage) && $strPage=='sales_report' ? 'active' : '')?>">
+                    売り上げ状況
+                    <i class="icon-arrow-right"></i>
+                </a>
+            </li>
+            <li>
+                <a href="/mypage/cashing" class="mypage-nav-list-item <?= (isset($strPage) && $strPage=='cashing' ? 'active' : '')?>">
+                    換金申請
+                    <i class="icon-arrow-right"></i>
+                </a>
+            </li>
+        </ul>
+        <h3 class="mypage-nav-head">購入者用</h3>
+        <ul class="mypage-nav-list">
+            <li>
+                <a href="/cart" class="mypage-nav-list-item <?= (isset($strPage) && $strPage=='cart' ? 'active' : '')?>">
+                    カート
+                    <i class="icon-arrow-right"></i>
+                </a>
+            </li>
+            <li>
+                <a href="/cart/buy_point" class="mypage-nav-list-item <?= (isset($strPage) && $strPage=='buy_point' ? 'active' : '')?>">
+                    ポイント購入
+                    <i class="icon-arrow-right"></i>
+                </a>
+            </li>
+            <li>
+                <a href="/mypage/favorite" class="mypage-nav-list-item <?= (isset($strPage) && $strPage=='favorite' ? 'active' : '')?>">
+                    お気に入り一覧
+                    <i class="icon-arrow-right"></i>
+                </a>
+            </li>
+            <li>
+                <a href="/mypage/purchased" class="mypage-nav-list-item <?= (isset($strPage) && $strPage=='purchased' ? 'active' : '')?>">
+                    購入済み商品
+                    <i class="icon-arrow-right"></i>
+                </a>
+            </li>
+
+            <li>
+                <a href="/mypage/purchased_point" class="mypage-nav-list-item <?= (isset($strPage) && $strPage=='purchased_point' ? 'active' : '')?>">
+                    ポイント購入履歴
+                    <i class="icon-arrow-right"></i>
+                </a>
+            </li>
+
+        </ul>
+
+        <h3 class="mypage-nav-head">登録情報</h3>
+
+        <ul class="mypage-nav-list">
+            <li>
+                <a href="/mypage/profile" class="mypage-nav-list-item <?= (isset($strPage) && $strPage=='profile' ? 'active' : '')?>">
+                    登録情報
+                    <i class="icon-arrow-right"></i>
+                </a>
+            </li>
+            <li>
+                <a href="/message" class="mypage-nav-list-item <?= (isset($strPage) && $strPage=='message' ? 'active' : '')?>">
+                    メッセージ
+                    <i class="icon-arrow-right"></i>
+                </a>
+            </li>
+            <li>
+                <a href="/mypage/notice_mail" class="mypage-nav-list-item <?= (isset($strPage) && $strPage=='notice_mail' ? 'active' : '')?>">
+                    メール通知設定
+                    <i class="icon-arrow-right"></i>
+                </a>
+            </li>
+
+            <li>
+                <a href="/mypage/followlist" class="mypage-nav-list-item <?= (isset($strPage) && $strPage=='followlist' ? 'active' : '')?>">
+                    フォロー一覧
+                    <i class="icon-arrow-right"></i>
+                </a>
+            </li>
+            <li>
+                <a href="/mypage/followerlist" class="mypage-nav-list-item <?= (isset($strPage) && $strPage=='followerlist' ? 'active' : '')?>">
+                    フォロワー一覧
+                    <i class="icon-arrow-right"></i>
+                </a>
+            </li>
+
+            <li>
+                <a href="/mypage/withdrawal" class="mypage-nav-list-item <?= (isset($strPage) && $strPage=='withdrawal' ? 'active' : '')?>">
+                    退会
+                    <i class="icon-arrow-right"></i>
+                </a>
+            </li>
+
+
+        </ul>
+    </nav>
+</div>
